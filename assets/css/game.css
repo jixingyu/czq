@@ -1,0 +1,7 @@
+.text-num {
+    margin-bottom: 30px;
+}
+
+.text-num input[type="text"] {
+    width: 50px;
+}
