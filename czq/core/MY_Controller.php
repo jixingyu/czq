@@ -68,21 +68,15 @@ class Admin_Controller extends Base_Controller
 {
     public function __construct()
     {
-
         parent::__construct();
 
         $this->load->library('auth');
         $this->auth->is_logged_in(uri_string());
-    }
-
-    public function view($view, $vars = array(), $string = false)
-    {
-        if ($string) {
-            $result = $this->load->view($view, $vars, true);
-            return $result;
-        } else {
-            $this->load->view($view, $vars);
-        }
+        $this->curUser = $this->auth->get_current_user();
+        $this->load->vars(array(
+            'username' => $this->curUser['username']
+        ));
+        $this->load->helper('admin');
     }
 }
 
