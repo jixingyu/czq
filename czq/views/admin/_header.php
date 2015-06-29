@@ -14,7 +14,7 @@
     <link href="<?php echo base_url('assets/css/plugins/metisMenu/metisMenu.min.css');?>" rel="stylesheet">
     <link href="<?php echo base_url('assets/css/sb-admin-2.css');?>" rel="stylesheet">
     <link href="<?php echo base_url('assets/font-awesome-4.1.0/css/font-awesome.min.css');?>" rel="stylesheet" type="text/css">
-    <link href="<?php echo base_url('assets/css/game.css');?>" rel="stylesheet">
+    <link href="<?php echo base_url('assets/css/czq.css');?>" rel="stylesheet">
 
     <script src="<?php echo base_url('assets/js/jquery.js');?>"></script>
     <script src="<?php echo base_url('assets/js/bootstrap.min.js');?>"></script>
@@ -69,80 +69,11 @@
 		    <div class="navbar-default sidebar" role="navigation">
 		        <div class="sidebar-nav navbar-collapse">
 		            <ul class="nav" id="side-menu">
-		                <li<?php echo ($tab == 'dashboard') ? ' class="active"' : '';?>>
-		                    <a href="/admin/dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+		                <li<?php echo ($tab == 'job') ? ' class="active"' : '';?>>
+		                    <a href="/admin/job"><i class="fa fa-edit fa-fw"></i> 职位管理</a>
 		                </li>
-		                <li<?php echo ($subTab == 'resetPwd') ? ' class="active"' : '';?>>
-		                    <a href="/admin/passport/resetPwd"><i class="fa fa-edit fa-fw"></i> 重置密码</a>
-		                </li>
-		                <li<?php echo ($tab == 'turntable') ? ' class="active"' : '';?>>
-		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 转盘<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="/admin/turntable">游戏参数配置</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/turntable/statistic">统计</a>
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
-		                </li>
-		                <li<?php echo ($tab == 'horserace') ? ' class="active"' : '';?>>
-		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 赛马<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="/admin/horserace">游戏参数配置</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/horserace/statistic">统计</a>
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
-		                </li>
-		                <li<?php echo ($tab == 'carrace') ? ' class="active"' : '';?>>
-		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 赛车<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="/admin/carrace">游戏参数配置</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/carrace/statistic">统计</a>
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
-		                </li>
-		                <li<?php echo ($tab == 'spot') ? ' class="active"' : '';?>>
-		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 找茬<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="/admin/spot">游戏参数配置</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/spot/image">图片管理</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/spot/statistic">统计</a>
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
-		                </li>
-		                <li<?php echo ($tab == 'find') ? ' class="active"' : '';?>>
-		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 找东西<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="/admin/find">游戏参数配置</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/find/tag">标签管理</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/find/image">图片管理</a>
-		                        </li>
-		                        <li>
-		                            <a href="/admin/find/statistic">统计</a>
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
+		                <li<?php echo ($tab == 'company') ? ' class="active"' : '';?>>
+		                    <a href="/admin/company"><i class="fa fa-edit fa-fw"></i> 公司管理</a>
 		                </li>
 		                <li>
 		                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
@@ -192,6 +123,6 @@
 		        <?php elseif (!empty($status)): ?>
 		        <div class="alert alert-success alert-dismissable">
 		            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		            修改配置成功
+		            修改成功
 		        </div>
 		        <?php endif; ?>

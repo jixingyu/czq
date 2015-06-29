@@ -17,7 +17,7 @@ if ( ! function_exists('go_dashboard'))
 {
 	function go_dashboard()
 	{
-	    redirect('admin/dashboard');
+	    redirect('admin/job');
 	}
 }
 

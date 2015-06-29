@@ -7,6 +7,7 @@ class Passport extends CI_Controller
         parent::__construct();
 
         $this->load->library('Auth');
+        $this->load->helper('admin');
     }
 
     /**
