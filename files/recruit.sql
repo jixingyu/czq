@@ -57,6 +57,9 @@ CREATE TABLE `job` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `degree` varchar(32) DEFAULT '',
+  `salary` varchar(16) DEFAULT '',
+  `district` varchar(16) DEFAULT '',
   `company_id` int(11) unsigned DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
@@ -65,7 +68,7 @@ CREATE TABLE `job` (
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`description`,`company_id`,`create_time`,`update_time`) values (1,'test',NULL,0,1435570742,1435570742);
+insert  into `job`(`id`,`name`,`description`,`degree`,`salary`,`district`,`company_id`,`create_time`,`update_time`) values (1,'test',NULL,'','','',0,1435570742,1435570742);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
