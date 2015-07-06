@@ -1,5 +1,5 @@
 <?php
-$config['error_code'   = array(
+$config['error_code']   = array(
     '204'   => array(
         'code'    => 204,
         'error'   => '未找到您要查看的内容',

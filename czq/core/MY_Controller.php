@@ -100,6 +100,8 @@ class App_Controller extends REST_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->library(array('session', 'app_user_lib'));
+        $this->load->helper('error');
 
         // $this->load->library('user_agent');
         // if (!$this->agent->is_mobile()) {
@@ -107,5 +109,27 @@ class App_Controller extends REST_Controller
             // show_error('Api Inaccessible.', 500); // cloud only access with mobile
         // }
 
+    }
+
+    protected function _get_uid($check = true)
+    {
+        $token = $this->get('token');
+
+        $result = $this->app_user_lib->is_logged_in($token);
+        if ($check) {
+            if ($result['code'] == 1) {
+                return $result['uid'];
+            } else {
+                $this->response(array(
+                    'error' => api_error($result['code']),
+                ), 200);
+            }
+        } else {
+            if ($result['code'] == 1) {
+                return $result['uid'];
+            } else {
+                return false;
+            }
+        }
     }
 }

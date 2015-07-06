@@ -7,7 +7,7 @@ class Job_model extends MY_Model
     public function search_count($where)
     {
         $this->db->from($this->table);
-        if ($where['q']) {
+        if (!empty($where['q'])) {
             $this->db->like('job.name', $where['q']);
             $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
             $this->db->like('company.name', $where['q']);
@@ -23,10 +23,11 @@ class Job_model extends MY_Model
 
     public function search_jobs($where, $limit, $offset = 0)
     {
+        $this->db->select($this->table . '.*,company.name as c_name,company.description as c_description,company.address as c_address,company.industry as c_industry,company.number as c_number');
         $this->db->from($this->table);
-        if ($where['q']) {
+        $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
+        if (!empty($where['q'])) {
             $this->db->like('job.name', $where['q']);
-            $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
             $this->db->like('company.name', $where['q']);
             unset($where['q']);
         }

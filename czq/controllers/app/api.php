@@ -5,7 +5,6 @@ class Api extends App_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('app_user_lib');
     }
 
     public function job_list_get()
@@ -13,7 +12,8 @@ class Api extends App_Controller
         $this->load->model('job_model');
         $q         = $this->get('q');
         $district  = $this->get('district');
-        $page = $this->get('page') ? $this->get('page') : 1;
+        $page = $this->get('page');
+        $page = $page ? $page : 1;
         $condition = array();
         if (!empty($q)) {
         	$condition['q'] = $q;
@@ -43,17 +43,11 @@ class Api extends App_Controller
         ), 200);
     }
 
-
-
-
-
-
-
-
     public function favorite_list_get()
     {
         $this->load->model('favorite_model');
-        $page = $this->get('page') ? $this->get('page') : 1;
+        $page = $this->get('page');
+        $page = $page ? $page : 1;
         $uid = $this->_get_uid();
 
         $limit = $this->config->item('app_page_size');
