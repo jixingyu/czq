@@ -69,9 +69,18 @@
 		    <div class="navbar-default sidebar" role="navigation">
 		        <div class="sidebar-nav navbar-collapse">
 		            <ul class="nav" id="side-menu">
-		                <li<?php echo ($tab == 'job') ? ' class="active"' : '';?>>
-		                    <a href="/admin/job"><i class="fa fa-edit fa-fw"></i> 职位管理</a>
+		                <li<?php echo ($tab == 'turntable') ? ' class="active"' : '';?>>
+		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 职位管理<span class="fa arrow"></span></a>
+		                    <ul class="nav nav-second-level">
+		                        <li>
+		                            <a href="/admin/job">职位列表</a>
+		                        </li>
+		                        <li>
+		                            <a href="/admin/job/apply_list">职位申请列表</a>
+		                        </li>
+		                    </ul>
 		                </li>
+	
 		                <li<?php echo ($tab == 'company') ? ' class="active"' : '';?>>
 		                    <a href="/admin/company"><i class="fa fa-edit fa-fw"></i> 公司管理</a>
 		                </li>

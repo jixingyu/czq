@@ -55,7 +55,7 @@ class Api extends App_Controller
 
         $count = $this->favorite_model->get_count(array('user_id' => $uid));
         if ($count) {
-            $favorites = $this->favorite_model->get_list(array('user_id' => $uid), $limit, $offset, 'create_time');
+            $favorites = $this->favorite_model->favorite_list(array('user_id' => $uid), $limit, $offset);
         } else {
             $favorites = array();
         }
@@ -95,5 +95,84 @@ class Api extends App_Controller
                 'is_favorited' => 0,
             ), 200);
         }
+    }
+
+    public function apply_list_get()
+    {
+        $this->load->model('apply_model');
+        $page = $this->get('page');
+        $page = $page ? $page : 1;
+        $uid = $this->_get_uid();
+
+        $limit = $this->config->item('app_page_size');
+        $offset = $limit * ($page-1);
+
+        $count = $this->apply_model->get_count(array('user_id' => $uid));
+        if ($count) {
+            $applys = $this->apply_model->apply_list(array('user_id' => $uid), $limit, $offset);
+        } else {
+            $applys = array();
+        }
+
+        return $this->response(array(
+            'code'          => 1,
+            'data'          => $applys,
+            'pagination'    => array(
+                'page'      => intval($page),
+                'pageSize'  => intval($limit),
+                'total'     => $count,
+            ),
+        ), 200);
+    }
+
+    public function apply_post()
+    {
+        $this->load->model(array('job_model', 'apply_model', 'resume_model'));
+        $job_id = intval($this->post('job_id'));
+        $resume_id = intval($this->post('resume_id'));
+        $uid = $this->_get_uid();
+        $job_exist = $this->job_model->get_count(array('id' => $job_id, 'is_deleted' => 0));
+        if (empty($job_exist)) {
+            $this->response(api_error(90001, '您申请的职位不存在！'), 200);
+        }
+        $resume_exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid));
+        if (empty($resume_exist)) {
+            $this->response(api_error(90001, '请选择您要投递的简历！'), 200);
+        }
+
+        $where = array('user_id' => $uid, 'job_id' => $job_id, 'resume_id' => $resume_id);
+        if (!$this->apply_model->get_count($where)) {
+            $where['create_time'] = time();
+            $this->apply_model->insert($where);
+        }
+        $this->response(array('code' => 1), 200);
+    }
+
+    public function interview_list_get()
+    {
+        $this->load->model('interview_model');
+        $page = $this->get('page');
+        $page = $page ? $page : 1;
+        $uid = $this->_get_uid();
+
+        $limit = $this->config->item('app_page_size');
+        $offset = $limit * ($page-1);
+
+        $count = $this->interview_model->get_count(array('user_id' => $uid));
+        if ($count) {
+            $interviews = $this->interview_model->interview_list(array('user_id' => $uid), $limit, $offset);
+        } else {
+            $interviews = array();
+        }
+
+        return $this->response(array(
+            'code'          => 1,
+            'data'          => $interviews,
+            'pagination'    => array(
+                'page'      => intval($page),
+                'pageSize'  => intval($limit),
+                'total'     => $count,
+            ),
+        ), 200);
     }
 }

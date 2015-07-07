@@ -19,6 +19,14 @@
                             <input type="text" name="name" style="width:200px;" value="<?php if (!empty($job['name'])) echo $job['name'];?>">
                         </div>
                         <div class="form-group">
+                            <label>所在地区</label>
+                            <select id="district" name="district" class="form-control">
+                                <?php foreach ($district_list as $v) { ?>
+                                    <option value="<?php echo $v;?>"<?php if ($job['district'] == $v) {echo ' selected="selected"';} ?>><?php echo $v;?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>公司</label>
                             <select name="company_id" class="form-control">
                                 <?php foreach ($company_list as $company) { ?>
@@ -29,22 +37,62 @@
                         <div class="form-group">
                             <label>学历要求</label>
                             <select id="degree" name="degree" class="form-control">
-                                <option value="-1">自定义</option>
                                 <?php foreach ($degree_list as $v) { ?>
                                     <option value="<?php echo $v;?>"<?php if ($job['degree'] == $v) {echo ' selected="selected"';$sel_degree = true;} ?>><?php echo $v;?></option>
                                 <?php } ?>
+                                <option value="-1">自定义</option>
                             </select>
-                            <input type="text" id="custom_degree" name="custom_degree"<?php if ($job['id'] && !$sel_degree) echo ' value="' . $job['degree'] . '"'; elseif (!$sel_degree) echo ' style="display:none"'; ?> />
+                            <div style="margin-top:10px;" id="custom_degree_div">
+                                请填写：
+                                <input type="text" id="custom_degree" name="custom_degree"<?php if ($job['id'] && !$sel_degree) echo ' value="' . $job['degree'] . '"'; ?> />
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>月薪</label>
                             <select id="salary" name="salary" class="form-control">
-                                <option value="-1">自定义</option>
                                 <?php foreach ($salary_list as $v) { ?>
                                     <option value="<?php echo $v;?>"<?php if ($job['salary'] == $v) {echo ' selected="selected"';$sel_salary = true;} ?>><?php echo $v;?></option>
                                 <?php } ?>
+                                <option value="-1">自定义</option>
                             </select>
-                            <input type="text" id="custom_salary" name="custom_salary"<?php if ($job['id'] && !$sel_salary) echo ' value="' . $job['salary'] . '"'; elseif (!$sel_degree) echo ' style="display:none"'; ?> />
+                            <div style="margin-top:10px;" id="custom_salary_div">
+                                请填写：
+                                <input type="text" id="custom_salary" name="custom_salary"<?php if ($job['id'] && !$sel_salary) echo ' value="' . $job['salary'] . '"'; ?> />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>工作年限</label>
+                            <select id="working_years" name="working_years" class="form-control">
+                                <?php foreach ($working_years_list as $v) { ?>
+                                    <option value="<?php echo $v;?>"<?php if ($job['working_years'] == $v) {echo ' selected="selected"';} ?>><?php echo $v;?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>招聘人数</label>
+                            <input type="text" name="recuit_number" style="width:200px;" value="<?php if (!empty($job['recuit_number'])) echo $job['recuit_number'];?>">
+                        </div>
+                        <div class="form-group">
+                            <label>职位类型</label>
+                            <select id="job_type" name="job_type" class="form-control">
+                                <?php foreach ($job_type_list as $v) { ?>
+                                    <option value="<?php echo $v;?>"<?php if ($job['job_type'] == $v) {echo ' selected="selected"';} ?>><?php echo $v;?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>职位福利</label>
+                            <div>
+                            <?php foreach ($benefit_list as $v) :?>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" value="<?php echo $v;?>" name="benefit[]" <?php if ($job['benefit'] && in_array($v, $job['benefit'])) echo 'checked="checked"';?>><?php echo $v?>
+                                </label>
+                            <?php endforeach;?>
+                            <div>
+                        </div>
+                        <div class="form-group">
+                            <label>任职要求</label>
+                            <textarea name="requirement"><?php if (!empty($job['requirement'])) echo $job['requirement'];?></textarea>
                         </div>
                     </div>
                 </div>
@@ -55,18 +103,27 @@
     </div>
 </div>
 <script>
+jQuery(function($){
+    if ($(this).children('option:selected').val() != '-1') {
+        $('#custom_degree_div').hide();
+    }
+    if ($(this).children('option:selected').val() != '-1') {
+        $('#custom_salary_div').hide();
+    }
+});
+
 $('#degree').change(function(){
     if ($(this).children('option:selected').val() == '-1') {
-        $('#custom_degree').show();
+        $('#custom_degree_div').show();
     } else {
-        $('#custom_degree').hide();
+        $('#custom_degree_div').hide();
     }
 });
 $('#salary').change(function(){
     if ($(this).children('option:selected').val() == '-1') {
-        $('#custom_salary').show();
+        $('#custom_salary_div').show();
     } else {
-        $('#custom_salary').hide();
+        $('#custom_salary_div').hide();
     }
 });
 </script>

@@ -83,7 +83,7 @@ class Company extends Admin_Controller
         $company = $this->company_model->get_one(array('id' => $id));
         if (!empty($company)) {
         	$this->load->model('job_model');
-            $exist = $this->job_model->get_count(array('company_id' => $id));
+            $exist = $this->job_model->get_count(array('company_id' => $id, 'is_deleted' => 0));
             if ($exist > 0) {
                 $data['message'] = '该公司下有发布的职位，无法删除';
             } else {

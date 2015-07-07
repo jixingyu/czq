@@ -5,3 +5,5 @@ $config['page_size'] = 20;
 $config['app_page_size'] = 20;
 
 $config['resume_limit'] = 3;
+
+$config['reg_active'] = 0;
