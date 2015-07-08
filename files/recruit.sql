@@ -32,6 +32,42 @@ CREATE TABLE `admin_member` (
 
 insert  into `admin_member`(`uid`,`username`,`password`) values (1,'admin','2cd20a9777fa019d63dc8e918fa8ee33799992f9');
 
+/*Table structure for table `app_token` */
+
+DROP TABLE IF EXISTS `app_token`;
+
+CREATE TABLE `app_token` (
+  `user_id` int(11) unsigned NOT NULL,
+  `token` varchar(40) NOT NULL,
+  `create_time` int(11) unsigned NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `uniq_token` (`token`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `app_token` */
+
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'7e01709472944cb2164aa47d6ca4cde5',1436235286,1438913686);
+
+/*Table structure for table `apply` */
+
+DROP TABLE IF EXISTS `apply`;
+
+CREATE TABLE `apply` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `job_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `resume_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) unsigned DEFAULT '0',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_apply` (`user_id`,`job_id`,`resume_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `apply` */
+
+insert  into `apply`(`id`,`user_id`,`job_id`,`resume_id`,`status`,`create_time`) values (1,1,1,1,0,1436234815);
+
 /*Table structure for table `company` */
 
 DROP TABLE IF EXISTS `company`;
@@ -52,20 +88,37 @@ CREATE TABLE `company` (
 
 insert  into `company`(`id`,`name`,`description`,`address`,`industry`,`number`,`create_time`,`update_time`) values (1,'公司一号',NULL,'','',0,1435569364,1435569364);
 
+/*Table structure for table `favorite` */
+
+DROP TABLE IF EXISTS `favorite`;
+
+CREATE TABLE `favorite` (
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `job_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `create_time` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`,`job_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `favorite` */
+
+insert  into `favorite`(`user_id`,`job_id`,`create_time`) values (1,1,0);
+
 /*Table structure for table `interview` */
 
 DROP TABLE IF EXISTS `interview`;
 
 CREATE TABLE `interview` (
-  `user_id` int(11) unsigned NOT NULL,
-  `job_id` int(11) unsigned NOT NULL,
+  `apply_id` int(11) unsigned NOT NULL,
   `address` varchar(255) DEFAULT '',
   `interview_time` int(11) unsigned DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
-  PRIMARY KEY (`user_id`,`job_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `update_time` int(11) unsigned DEFAULT '0',
+  PRIMARY KEY (`apply_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `interview` */
+
+insert  into `interview`(`apply_id`,`address`,`interview_time`,`create_time`,`update_time`) values (1,'地点',1435579364,1435578364,0);
 
 /*Table structure for table `job` */
 
@@ -74,16 +127,16 @@ DROP TABLE IF EXISTS `job`;
 CREATE TABLE `job` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text,
   `degree` varchar(32) DEFAULT '',
   `salary` varchar(16) DEFAULT '',
   `district` varchar(16) DEFAULT '',
   `company_id` int(11) unsigned DEFAULT '0',
-  `experience` varchar(8) DEFAULT '',
+  `working_years` varchar(8) DEFAULT '',
   `recuit_number` smallint(11) unsigned DEFAULT '0',
-  `type` varchar(8) DEFAULT '',
+  `job_type` varchar(8) DEFAULT '',
   `benefit` varchar(100) DEFAULT '',
   `requirement` text,
+  `is_deleted` tinyint(1) DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -91,23 +144,26 @@ CREATE TABLE `job` (
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`description`,`degree`,`salary`,`district`,`company_id`,`experience`,`recuit_number`,`type`,`benefit`,`requirement`,`create_time`,`update_time`) values (1,'test',NULL,'','','',0,'',0,'','',NULL,1435570742,1435570742);
+insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recuit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'test','','','工业园区',1,'',0,'','',NULL,0,1435570742,1435570742);
 
 /*Table structure for table `member` */
 
 DROP TABLE IF EXISTS `member`;
 
 CREATE TABLE `member` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `real_name` varchar(255) NOT NULL DEFAULT '',
   `mobile` varchar(11) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
+  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
+
+insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`) values (1,'ymx_4@163.com','cc1251c21d4bf83d944e3e1b1b58d3fa','','',1);
 
 /*Table structure for table `resume` */
 
@@ -129,9 +185,11 @@ CREATE TABLE `resume` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resume` */
+
+insert  into `resume`(`id`,`user_id`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`create_time`,`update_time`) values (1,1,'',0,0,'','',0,'','','','',1436234729,1436234729);
 
 /*Table structure for table `work_experience` */
 
@@ -144,10 +202,14 @@ CREATE TABLE `work_experience` (
   `start_time` int(11) unsigned DEFAULT '0',
   `end_time` int(11) unsigned DEFAULT '0',
   `description` text,
+  `create_time` int(11) unsigned DEFAULT '0',
+  `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `work_experience` */
+
+insert  into `work_experience`(`id`,`resume_id`,`company`,`start_time`,`end_time`,`description`,`create_time`,`update_time`) values (1,1,'公司名',0,0,NULL,0,0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
