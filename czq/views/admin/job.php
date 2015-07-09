@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-lg-8">
         <h1 class="page-header">
-            <?php if (isset($job['id'])) echo '修改职位'; else echo '新增职位';?>
+            <?php if (!empty($job['id'])) echo '修改职位'; else echo '新增职位';?>
             <a class="pull-right admin-back" href="/admin/job">返回</a>
         </h1>
 
@@ -16,7 +16,7 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label>职位名称</label>
-                            <input type="text" name="name" style="width:200px;" value="<?php if (!empty($job['name'])) echo $job['name'];?>">
+                            <input class="form-control" type="text" name="name" style="width:200px;" value="<?php if (!empty($job['name'])) echo $job['name'];?>">
                         </div>
                         <div class="form-group">
                             <label>所在地区</label>
@@ -43,7 +43,7 @@
                                 <option value="-1">自定义</option>
                             </select>
                             <div style="margin-top:10px;" id="custom_degree_div">
-                                请填写：
+                                请填写自定义学历：
                                 <input type="text" id="custom_degree" name="custom_degree"<?php if ($job['id'] && !$sel_degree) echo ' value="' . $job['degree'] . '"'; ?> />
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                 <option value="-1">自定义</option>
                             </select>
                             <div style="margin-top:10px;" id="custom_salary_div">
-                                请填写：
+                                请填写自定义月薪：
                                 <input type="text" id="custom_salary" name="custom_salary"<?php if ($job['id'] && !$sel_salary) echo ' value="' . $job['salary'] . '"'; ?> />
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                         </div>
                         <div class="form-group">
                             <label>招聘人数</label>
-                            <input type="text" name="recuit_number" style="width:200px;" value="<?php if (!empty($job['recuit_number'])) echo $job['recuit_number'];?>">
+                            <input class="form-control" type="text" name="recuit_number" style="width:200px;" value="<?php if (!empty($job['recuit_number'])) echo $job['recuit_number'];?>">
                         </div>
                         <div class="form-group">
                             <label>职位类型</label>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="form-group">
                             <label>任职要求</label>
-                            <textarea name="requirement"><?php if (!empty($job['requirement'])) echo $job['requirement'];?></textarea>
+                            <textarea class="form-control" name="requirement"><?php if (!empty($job['requirement'])) echo $job['requirement'];?></textarea>
                         </div>
                     </div>
                 </div>

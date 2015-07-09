@@ -76,19 +76,19 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>面试地点</label>
-                    <input type="text" id="address" />
+                    <input class="form-control" type="text" id="address" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">面试时间</label>
                     <div style="width:50%;" class="input-group date date_interview" data-date-format="yyyy-mm-dd hh:ii" data-link-format="yyyy-mm-dd hh:ii">
-                        <input class="form-control" size="2" id="interview_time" type="text" readonly>
+                        <input class="form-control" id="interview_time" type="text" readonly>
                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">提交</button>
+                <button type="button" class="btn btn-primary" id="post-interview">提交</button>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ class Resume_api extends App_Controller
 
         $count = $this->resume_model->get_count(array('user_id' => $uid));
         if ($count) {
-            $resumes = $this->resume_model->get_list(array('user_id' => $uid), $limit, $offset, 'create_time');
+            $resumes = $this->resume_model->resume_list(array('user_id' => $uid), $limit, $offset);
         } else {
             $resumes = array();
         }
@@ -51,205 +51,104 @@ class Resume_api extends App_Controller
         ), 200);
     }
 
-    public function add_resume_post()
-    {
-        $uid = $this->_get_uid();
-        $count = $this->resume_model->get_count(array('user_id' => $uid));
-        $limit = $this->config->item('resume_limit');
-        if ($count >= $limit) {
-            $this->response(api_error(90001, '最多可保存' . $limit . '份简历！'), 200);
-        }
-
-        $resume_id = $this->resume_model->insert(array(
-            'user_id' => $uid,
-            'create_time' => time(),
-            'update_time' => time()
-        ));
-        $this->response(array(
-            'code' => 1,
-            'data' => $resume_id
-        ), 200);
-    }
-
-    public function real_name_post()
+    public function resume_post()
     {
         $uid = $this->_get_uid();
         $resume_id = intval($this->post('resume_id'));
         if (!$resume_id) {
-            $this->response(api_error(400), 200);
+            $count = $this->resume_model->get_count(array('user_id' => $uid));
+            $limit = $this->config->item('resume_limit');
+            if ($count >= $limit) {
+                $this->response(api_error(90001, '最多可保存' . $limit . '份简历！'), 200);
+            }
         }
-        $real_name = trim($this->post('real_name'));
-        if (empty($real_name)) {
+
+        $set = array('personal_info_completed' => 1);
+        $set['real_name'] = trim($this->post('real_name'));
+        if (empty($set['real_name'])) {
             $this->response(api_error(90001, '请填写您的姓名！'), 200);
         }
-        $this->resume_model->update(
-            array('real_name' => $real_name, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function gender_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
-        $gender = $this->post('gender');
-        $gender = $gender ? 1 : 0;
+        $set['gender'] = $this->post('gender');
+        $set['gender'] = $gender ? 1 : 0;
 
-        $this->resume_model->update(
-            array('gender' => $gender, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
-
-    public function birthday_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $birthday = intval($this->post('birthday'));
-        if (empty($birthday)) {
-            $this->response(api_error(90001, '请填写您的生日！'), 200);
+        if ($birthday) {
+            $set['birthday'] = $birthday;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('birthday' => $birthday, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function native_place_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $native_place = trim($this->post('native_place'));
-        if (empty($native_place)) {
-            $this->response(api_error(90001, '请填写您的籍贯！'), 200);
+        if ($native_place) {
+            $set['native_place'] = $native_place;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('native_place' => $native_place, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function political_status_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $political_status = trim($this->post('political_status'));
-        if (empty($political_status)) {
-            $this->response(api_error(90001, '请填写您的政治面貌！'), 200);
+        if ($political_status) {
+            $set['political_status'] = $political_status;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('political_status' => $political_status, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function working_years_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $working_years = intval($this->post('working_years'));
-        if (empty($working_years)) {
-            $this->response(api_error(90001, '请选择您的工作年龄！'), 200);
+        if ($working_years) {
+            $set['working_years'] = $working_years;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('working_years' => $working_years, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function mobile_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $mobile = trim($this->post('mobile'));
         if (!@preg_match('/^1[3-9][0-9]{9}$/', $mobile)) {
-            $this->response(api_error(90001, '请填写正确的手机号！'), 200);
-        }
-        $this->resume_model->update(
-            array('mobile' => $mobile, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
-
-    public function email_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
-        $email = trim($this->post('email'));
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->response(array(
-                'error' => api_error(90001, '请填写正确的邮箱地址！'),
+                'error' => api_error(90001, '请填写正确的手机号！'),
             ), 200);
+        } else {
+            $set['mobile'] = $mobile;
         }
-        $this->resume_model->update(
-            array('email' => $email, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function school_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
+        $email = trim($this->post('email'));
+        if ($email) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->response(array(
+                    'error' => api_error(90001, '请填写正确的邮箱地址！'),
+                ), 200);
+            } else {
+                $set['email'] = $email;
+            }
+        } else {
+            $set['personal_info_completed'] = 0;
         }
+
         $school = trim($this->post('school'));
-        if (empty($school)) {
-            $this->response(api_error(90001, '请填写您的毕业学校！'), 200);
+        if ($school) {
+            $set['school'] = $school;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('school' => $school, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function major_post()
-    {
-        $uid = $this->_get_uid();
-        $resume_id = intval($this->post('resume_id'));
-        if (!$resume_id) {
-            $this->response(api_error(400), 200);
-        }
         $major = trim($this->post('major'));
-        if (empty($major)) {
-            $this->response(api_error(90001, '请填写您的专业！'), 200);
+        if ($major) {
+            $set['major'] = $major;
+        } else {
+            $set['personal_info_completed'] = 0;
         }
-        $this->resume_model->update(
-            array('major' => $major, 'update_time' => time()),
-            array('id' => $resume_id,'user_id' => $user_id)
-        );
-        $this->response(array('code' => 1), 200);
+
+        if ($resume_id) {
+            $set['update_time'] = time();
+            $this->resume_model->update($set, array(
+                'id' => $resume_id,
+                'user_id' => $user_id
+            ));
+            $this->response(array('code' => 1), 200);
+        } else {
+            $set['create_time'] = $set['update_time'] = time();
+            $set['user_id'] = $user_id;
+            $resume_id = $this->resume_model->insert($set);
+            $this->response(array('code' => 1, 'data' => $resume_id), 200);
+        }
     }
 
     public function experience_list_get()
@@ -297,10 +196,11 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid));
-        if (empty($exist)) {
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        if (empty($resume)) {
             $this->response(api_error(90001, '该简历不存在！'), 200);
         }
+
         $set = array();
         $set['company'] = $this->post('company');
         if (empty($set['company'])) {
@@ -328,7 +228,36 @@ class Resume_api extends App_Controller
         } else {
             $set['create_time'] = $set['update_time'];
             $this->work_experience_model->insert($set);
+            if (!$resume['experience_completed']) {
+                $this->resume_model->update(array(
+                    'experience_completed' => 1,
+                    'update_time' => time()
+                ), array('id' => $resume_id));
+            }
         }
+        $this->response(array('code' => 1), 200);
+    }
+
+    public function evaluation_post()
+    {
+        $uid = $this->_get_uid();
+        $resume_id = intval($this->post('resume_id'));
+        if (!$resume_id) {
+            $this->response(api_error(400), 200);
+        }
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        if (empty($resume)) {
+            $this->response(api_error(90001, '该简历不存在！'), 200);
+        }
+        $set = array('evaluation' => $this->post('evaluation'), 'update_time' => time());
+        if (empty($set['evaluation'])) {
+            $this->response(api_error(90001, '请填写自我评价！'), 200);
+        }
+
+        if (!$resume['evaluation_completed']) {
+            $set['evaluation_completed'] = 1;
+        }
+        $this->resume_model->update($set, array('id' => $resume_id));
         $this->response(array('code' => 1), 200);
     }
 }

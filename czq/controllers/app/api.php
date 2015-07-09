@@ -7,6 +7,21 @@ class Api extends App_Controller
         parent::__construct();
     }
 
+    public function appconfig_get()
+    {
+        $this->config->load('job', TRUE);
+        $response = array(
+            'degree' => $this->config->item('degree', 'job'),
+            'salary' => $this->config->item('salary', 'job'),
+            'district' => $this->config->item('district', 'job'),
+            'working_years' => $this->config->item('working_years', 'job'),
+        );
+        return $this->response(array(
+            'code' => 1,
+            'data' => $response
+        ), 200);
+    }
+
     public function job_list_get()
     {
         $this->load->model('job_model');

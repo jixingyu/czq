@@ -90,11 +90,10 @@ class User_api extends App_Controller
         $this->response($response, 200);
     }
 
-    public function logout_post()
+    public function logout_get()
     {
         $token   = $this->get('token');
-        $user_id = (int) $this->post('user_id');
-        $result  = $this->app_user_lib->logout($token, $user_id);
+        $result  = $this->app_user_lib->logout($token);
         $this->response(array(
             'code' => 1
         ), 200);
@@ -122,26 +121,22 @@ class User_api extends App_Controller
         $this->response($response, 200);
     }
 
-    public function real_name_post()
+    public function edit_post()
     {
         $user_id = $this->_get_uid();
         $real_name = trim($this->input->post('real_name'));
         if (empty($real_name)) {
             $this->response(api_error(90001, '请填写您的姓名！'), 200);
         }
-        $this->member_model->update(array('real_name' => $real_name), array('user_id' => $user_id));
-        $this->app_user_lib->clear($user_id);
-        $this->response(array('code' => 1), 200);
-    }
 
-    public function mobile_post()
-    {
-        $user_id = $this->_get_uid();
         $mobile = trim($this->input->post('mobile'));
         if (!@preg_match('/^1[3-9][0-9]{9}$/', $mobile)) {
             $this->response(api_error(90001, '请填写正确的手机号！'), 200);
         }
-        $this->member_model->update(array('mobile' => $mobile), array('user_id' => $user_id));
+        $this->member_model->update(array(
+            'real_name' => $real_name,
+            'mobile' => $mobile,
+        ), array('user_id' => $user_id));
         $this->app_user_lib->clear($user_id);
         $this->response(array('code' => 1), 200);
     }

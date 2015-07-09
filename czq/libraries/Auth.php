@@ -17,8 +17,7 @@ class Auth
         $this->CI->load->model('admin_member_model');
 
         $admin_session_config = array(
-            'sess_cookie_name' => 'admin_session_config',
-            'sess_expiration'  => 0
+            'sess_cookie_name' => 'admin_session_config'
         );
         $this->CI->load->library('session', $admin_session_config, 'admin_session');
 

@@ -47,7 +47,7 @@ CREATE TABLE `app_token` (
 
 /*Data for the table `app_token` */
 
-insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'7e01709472944cb2164aa47d6ca4cde5',1436235286,1438913686);
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'81465d45b8324f98397e9e7452f8f1ae',1436410774,1439089174);
 
 /*Table structure for table `apply` */
 
@@ -82,11 +82,11 @@ CREATE TABLE `company` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `company` */
 
-insert  into `company`(`id`,`name`,`description`,`address`,`industry`,`number`,`create_time`,`update_time`) values (1,'公司一号',NULL,'','',0,1435569364,1435569364);
+insert  into `company`(`id`,`name`,`description`,`address`,`industry`,`number`,`create_time`,`update_time`) values (1,'公司1','呵呵，我是公司一号','苏州','IT',100,1435569364,1436433619),(2,'公司2','我是公司二号','苏州','家电',200,1436431352,1436433647);
 
 /*Table structure for table `favorite` */
 
@@ -118,7 +118,7 @@ CREATE TABLE `interview` (
 
 /*Data for the table `interview` */
 
-insert  into `interview`(`apply_id`,`address`,`interview_time`,`create_time`,`update_time`) values (1,'地点',1435579364,1435578364,0);
+insert  into `interview`(`apply_id`,`address`,`interview_time`,`create_time`,`update_time`) values (1,'苏州工业园区11',1436491500,1435578364,1436430482);
 
 /*Table structure for table `job` */
 
@@ -134,17 +134,17 @@ CREATE TABLE `job` (
   `working_years` varchar(8) DEFAULT '',
   `recuit_number` smallint(11) unsigned DEFAULT '0',
   `job_type` varchar(8) DEFAULT '',
-  `benefit` varchar(100) DEFAULT '',
+  `benefit` text,
   `requirement` text,
   `is_deleted` tinyint(1) DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recuit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'test','','','工业园区',1,'',0,'','',NULL,0,1435570742,1435570742);
+insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recuit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498);
 
 /*Table structure for table `member` */
 
@@ -182,6 +182,10 @@ CREATE TABLE `resume` (
   `email` varchar(255) NOT NULL DEFAULT '',
   `school` varchar(32) NOT NULL DEFAULT '',
   `major` varchar(32) NOT NULL DEFAULT '',
+  `evaluation` text,
+  `personal_info_completed` tinyint(1) DEFAULT '0',
+  `evaluation_completed` tinyint(1) DEFAULT '0',
+  `experience_completed` tinyint(1) DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -189,7 +193,7 @@ CREATE TABLE `resume` (
 
 /*Data for the table `resume` */
 
-insert  into `resume`(`id`,`user_id`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`create_time`,`update_time`) values (1,1,'',0,0,'','',0,'','','','',1436234729,1436234729);
+insert  into `resume`(`id`,`user_id`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`evaluation`,`personal_info_completed`,`evaluation_completed`,`experience_completed`,`create_time`,`update_time`) values (1,1,'',0,0,'','',0,'','','','',NULL,0,0,0,1436234729,1436234729);
 
 /*Table structure for table `work_experience` */
 

@@ -55,7 +55,7 @@ class Job extends Admin_Controller
                 'working_years' => '',
                 'recuit_number' => 0,
                 'job_type' => '',
-                'benefit' => '',
+                'benefit' => array(),
                 'requirement' => '',
             ),
             'sel_degree' => false,
@@ -80,15 +80,16 @@ class Job extends Admin_Controller
         $post = $this->input->post();
         if (!empty($post)) {
             if ($post['degree'] == '-1') {
-                $data['job']['degree'] = $post['degree'] = $post['custom_degree'];
+                $post['degree'] = $post['custom_degree'];
             }
             if ($post['salary'] == '-1') {
-                $data['job']['salary'] = $post['salary'] = $post['custom_salary'];
+                $post['salary'] = $post['custom_salary'];
             }
 
             if (empty($post['name'])) {
                 $data['error'] = '请填写职位名称';
             }
+            $data['job'] = array_merge($data['job'], $post);
 
             if (empty($post['benefit'])) {
                 $post['benefit'] = '';
@@ -107,7 +108,6 @@ class Job extends Admin_Controller
 
                 $data['status'] = 1;
             }
-            $data['job'] = array_merge($data['job'], $post);
         }
         $this->load->view('admin/job', $data);
     }
@@ -155,6 +155,20 @@ class Job extends Admin_Controller
         $this->load->model('interview_model');
         $address = $this->input->post('address');
         $interview_time = $this->input->post('interview_time');
+        if (empty($address)) {
+            echo json_encode(array(
+                'code' => 0,
+                'data' => '请填写面试地点',
+            ));
+            exit;
+        }
+        if (empty($interview_time)) {
+            echo json_encode(array(
+                'code' => 0,
+                'data' => '请填写面试时间',
+            ));
+            exit;
+        }
         if (!empty($apply_id)) {
             $apply = $this->interview_model->find($apply_id, 'apply_id');
             if (empty($apply)) {
@@ -165,6 +179,7 @@ class Job extends Admin_Controller
                 exit;
             }
         }
+        $interview_time = strtotime($interview_time);
 
         if (empty($apply_id)) {
             $this->interview_model->insert(array(
@@ -175,14 +190,14 @@ class Job extends Admin_Controller
                 'update_time' => time(),
             ));
         } else {
-            $this->interview_model->insert(array(
+            $this->interview_model->update(array(
                 'address' => $address,
                 'interview_time' => $interview_time,
                 'update_time' => time(),
             ), array('apply_id' => $apply_id));
         }
         echo json_encode(array(
-            'code' => 0,
+            'code' => 1,
         ));
         exit;
     }

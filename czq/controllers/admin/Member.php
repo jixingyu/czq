@@ -3,29 +3,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  *
- * Company
+ * Member
  *
  * @author  Xy Ji
  */
-class Company extends Admin_Controller
+class Member extends Admin_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('company_model');
+        $this->load->model('member_model');
     }
 
     public function index()
     {
         $offset = intval($this->input->get('o'));
         $data   = array(
-            'company_list' => array(),
+            'member_list' => array(),
         );
 
-        $count = $this->company_model->get_count();
+        $count = $this->member_model->get_count();
         if ($count) {
             $limit = $this->config->item('page_size');
-            $data['company_list'] = $this->company_model->get_list(array(), $limit, $offset);
+            $data['member_list'] = $this->member_model->get_list(array(), $limit, $offset);
 
             $this->load->library('pagination');
 
@@ -38,32 +38,32 @@ class Company extends Admin_Controller
             ));
         }
 
-        $this->load->view('admin/company_list', $data);
+        $this->load->view('admin/member_list', $data);
     }
 
-    public function editCompany($id = 0)
+    public function editMember($user_id = 0)
     {
         $data = array(
-            'company' => array(
-                'name' => '',
-                'address' => '',
-                'industry' => '',
-                'number' => '',
-                'description' => '',
+            'member' => array(
+                'email' => '',
+                'real_name' => '',
+                'mobile' => '',
             ),
             'status' => 0,
         );
 
-        if ($id) {
-            $data['company'] = $this->company_model->get_one(array('id' => $id));
+        if ($user_id) {
+            $data['member'] = $this->member_model->get_one(array('user_id' => $user_id));
         }
 
         $post = $this->input->post();
         if (!empty($post)) {
-            $data['company'] = array_merge($data['company'], $post);
+            $data['member'] = array_merge($data['member'], $post);
 
-            if (empty($post['name'])) {
-                $data['error'] = '请填写公司名';
+            if (!$user_id) {
+                if (empty($post['email'])) {
+                    $data['error'] = '请填写邮箱';
+                }
             }
 
             if (empty($post['address'])) {
@@ -83,34 +83,17 @@ class Company extends Admin_Controller
             }
 
             if (empty($data['error'])) {
-                if ($id) {
+                if ($user_id) {
                     $post['update_time'] = time();
-                    $this->company_model->update($post, array('id' => $id));
+                    $this->member_model->update($post, array('user_id' => $user_id));
                 } else {
                     $post['create_time'] = $post['update_time'] = time();
-                    $data['company']['id'] = $this->company_model->insert($post);
+                    $data['member']['user_id'] = $this->member_model->insert($post);
                 }
 
                 $data['status'] = 1;
             }
         }
-        $this->load->view('admin/company', $data);
-    }
-
-    public function deleteCompany($id = 0)
-    {
-        $data = array('code' => 0);
-        $company = $this->company_model->get_one(array('id' => $id));
-        if (!empty($company)) {
-        	$this->load->model('job_model');
-            $exist = $this->job_model->get_count(array('company_id' => $id, 'is_deleted' => 0));
-            if ($exist > 0) {
-                $data['message'] = '该公司下有发布的职位，无法删除';
-            } else {
-                $this->company_model->delete($id);
-                $data['code'] = 1;
-            }
-        }
-        echo json_encode($data);
+        $this->load->view('admin/member', $data);
     }
 }

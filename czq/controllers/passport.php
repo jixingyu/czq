@@ -9,6 +9,11 @@ class Passport extends Front_Controller
         $this->load->library('user_lib');
     }
 
+    public function index()
+    {
+        echo 'test';exit;
+    }
+
     public function reset_pwd()
     {
     	$p = $this->input->get('p');

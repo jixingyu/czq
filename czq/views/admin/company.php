@@ -16,7 +16,23 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label>公司名</label>
-                            <input type="text" name="name" style="width:200px;" value="<?php if (!empty($company['name'])) echo $company['name'];?>">
+                            <input class="form-control" type="text" name="name" value="<?php if (!empty($company['name'])) echo $company['name'];?>">
+                        </div>
+                        <div class="form-group">
+                            <label>公司地址</label>
+                            <input class="form-control" type="text" name="address" value="<?php if (!empty($company['address'])) echo $company['address'];?>">
+                        </div>
+                        <div class="form-group">
+                            <label>所属行业</label>
+                            <input class="form-control" type="text" name="industry" value="<?php if (!empty($company['industry'])) echo $company['industry'];?>">
+                        </div>
+                        <div class="form-group">
+                            <label>公司人数</label>
+                            <input class="form-control" type="text" name="number" value="<?php if (!empty($company['number'])) echo $company['number'];?>">
+                        </div>
+                        <div class="form-group">
+                            <label>公司介绍</label>
+                            <textarea class="form-control" name="description"><?php if (!empty($company['description'])) echo $company['description'];?></textarea>
                         </div>
                     </div>
                 </div>

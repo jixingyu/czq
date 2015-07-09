@@ -30,7 +30,7 @@
 
 <?php
     $tab    = $this->uri->segment(2);
-    $subTab = $this->uri->segment(3);
+    $subTab = $this->uri->segment(3) ?: 'index';
 ?>
 
 		<!-- Navigation -->
@@ -69,14 +69,14 @@
 		    <div class="navbar-default sidebar" role="navigation">
 		        <div class="sidebar-nav navbar-collapse">
 		            <ul class="nav" id="side-menu">
-		                <li<?php echo ($tab == 'turntable') ? ' class="active"' : '';?>>
+		                <li<?php echo ($tab == 'job') ? ' class="active"' : '';?>>
 		                    <a href="#"><i class="fa fa-edit fa-fw"></i> 职位管理<span class="fa arrow"></span></a>
 		                    <ul class="nav nav-second-level">
 		                        <li>
-		                            <a href="/admin/job">职位列表</a>
+		                            <a href="/admin/job"<?php if ($tab == 'job' && $subTab == 'index') echo ' class="active"'; ?>>职位列表</a>
 		                        </li>
 		                        <li>
-		                            <a href="/admin/job/apply_list">职位申请列表</a>
+		                            <a href="/admin/job/apply_list"<?php if ($tab == 'job' && $subTab == 'apply_list') echo ' class="active"'; ?>>职位申请列表</a>
 		                        </li>
 		                    </ul>
 		                </li>
@@ -84,35 +84,9 @@
 		                <li<?php echo ($tab == 'company') ? ' class="active"' : '';?>>
 		                    <a href="/admin/company"><i class="fa fa-edit fa-fw"></i> 公司管理</a>
 		                </li>
-		                <li>
-		                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-		                    <ul class="nav nav-second-level">
-		                        <li>
-		                            <a href="#">Second Level Item</a>
-		                        </li>
-		                        <li>
-		                            <a href="#">Second Level Item</a>
-		                        </li>
-		                        <li>
-		                            <a href="#">Third Level <span class="fa arrow"></span></a>
-		                            <ul class="nav nav-third-level">
-		                                <li>
-		                                    <a href="#">Third Level Item</a>
-		                                </li>
-		                                <li>
-		                                    <a href="#">Third Level Item</a>
-		                                </li>
-		                                <li>
-		                                    <a href="#">Third Level Item</a>
-		                                </li>
-		                                <li>
-		                                    <a href="#">Third Level Item</a>
-		                                </li>
-		                            </ul>
-		                            <!-- /.nav-third-level -->
-		                        </li>
-		                    </ul>
-		                    <!-- /.nav-second-level -->
+	
+		                <li<?php echo ($tab == 'member') ? ' class="active"' : '';?>>
+		                    <a href="/admin/member"><i class="fa fa-edit fa-fw"></i> 用户管理</a>
 		                </li>
 		            </ul>
 		        </div>
