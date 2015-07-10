@@ -1,8 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class App_user_lib
+
+require_once(APPPATH . '/libraries/Abstract_user_lib.php');
+
+class App_user_lib extends Abstract_user_lib
 {
     public $CI;
-    public $salt = 'qQ#9+=~kK-';
 
     public function __construct()
     {

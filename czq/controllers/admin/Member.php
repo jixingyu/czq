@@ -13,6 +13,7 @@ class Member extends Admin_Controller
     {
         parent::__construct();
         $this->load->model('member_model');
+        $this->load->library('user_lib');
     }
 
     public function index()
@@ -48,6 +49,7 @@ class Member extends Admin_Controller
                 'email' => '',
                 'real_name' => '',
                 'mobile' => '',
+                'is_active' => 0,
             ),
             'status' => 0,
         );
@@ -60,40 +62,73 @@ class Member extends Admin_Controller
         if (!empty($post)) {
             $data['member'] = array_merge($data['member'], $post);
 
-            if (!$user_id) {
-                if (empty($post['email'])) {
-                    $data['error'] = '请填写邮箱';
+            $set = array(
+                'real_name' => $post['real_name'],
+                'is_active' => !empty($post['is_active']) ? 1 : 0,
+                'update_time' => time(),
+            );
+            if (!empty($post['mobile']) && !@preg_match('/^1[3-9][0-9]{9}$/', $post['mobile'])) {
+                $data['error'] = '请填写正确的手机号！';
+            } else {
+                $set['mobile'] = $post['mobile'];
+            }
+
+            if (empty($data['error']) && !$user_id) {
+                if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+                    $data['error'] = '请填写正确的邮箱';
+                } else {
+                    $set['email'] = $post['email'];
+
+                    if (empty($post['password'])) {
+                        $data['error'] = '请填写密码';
+                    } elseif ($post['password'] != $post['confirm_password']) {
+                        $data['error'] = '两次输入密码不一致';
+                    } else {
+                        $set['password'] = $this->user_lib->generate_pwd($post['password']);
+                    }
                 }
-            }
-
-            if (empty($post['address'])) {
-                $data['error'] = '请填写公司地址';
-            }
-
-            if (empty($post['industry'])) {
-                $data['error'] = '请填写公司所属行业';
-            }
-
-            if (empty($post['number'])) {
-                $data['error'] = '请填写公司人数';
-            }
-
-            if (empty($post['description'])) {
-                $data['error'] = '请填写公司描述';
+                $set['create_time'] = $set['update_time'];
             }
 
             if (empty($data['error'])) {
                 if ($user_id) {
-                    $post['update_time'] = time();
-                    $this->member_model->update($post, array('user_id' => $user_id));
+                    $this->member_model->update($set, array('user_id' => $user_id));
                 } else {
-                    $post['create_time'] = $post['update_time'] = time();
-                    $data['member']['user_id'] = $this->member_model->insert($post);
+                    $data['member']['user_id'] = $this->member_model->insert($set);
                 }
 
                 $data['status'] = 1;
             }
         }
         $this->load->view('admin/member', $data);
+    }
+
+    public function resetPwd($user_id)
+    {
+        $data = array(
+            'member_id' => $user_id,
+            'status' => 0,
+        );
+
+        $post = $this->input->post();
+        if (!empty($post)) {
+            if (empty($post['password'])) {
+                $data['error'] = '请填写密码';
+            } elseif ($post['password'] != $post['confirm_password']) {
+                $data['error'] = '两次输入密码不一致';
+            } else {
+                $password = $this->user_lib->generate_pwd($post['password']);
+            }
+
+            if (empty($data['error'])) {
+                $this->member_model->update(array(
+                    'password' => $password,
+                    'update_time' => time(),
+                ), array('user_id' => $user_id));
+
+                $data['status'] = 1;
+            }
+        }
+        $this->load->view('admin/reset_pwd', $data);
     }
 }

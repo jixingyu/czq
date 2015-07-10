@@ -1,4 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+require_once(APPPATH . '/libraries/Abstract_user_lib.php');
+
 /**
  *
  * User Libraries For Front
@@ -6,10 +9,9 @@
  * @copyright       2014 © Moore8. ALL Rights Reserved
  * @author          Moore8 Team
  */
-class User_lib
+class User_lib extends Abstract_user_lib
 {
     public $CI;
-    public $salt = 'qQ#9+=~kK-';
 
     public function __construct($adapter = false)
     {

@@ -32,8 +32,9 @@ class User_api extends App_Controller
         if ($reg_active) {
             $this->member_model->insert(array(
                 'email' => $email,
-                'password' => md5($password . $this->app_user_lib->salt),
+                'password' => $this->app_user_lib->generate_pwd($password),
                 'is_active' => 0,
+                'create_time' => time(),
             ));
             // TODO 发送激活邮件
         } else {
@@ -41,6 +42,7 @@ class User_api extends App_Controller
                 'email' => $email,
                 'password' => md5($password . $this->app_user_lib->salt),
                 'is_active' => 1,
+                'create_time' => time(),
             ));
         }
         $this->response(array('code' => 1), 200);
@@ -136,6 +138,7 @@ class User_api extends App_Controller
         $this->member_model->update(array(
             'real_name' => $real_name,
             'mobile' => $mobile,
+            'update_time' => time(),
         ), array('user_id' => $user_id));
         $this->app_user_lib->clear($user_id);
         $this->response(array('code' => 1), 200);

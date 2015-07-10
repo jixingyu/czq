@@ -78,6 +78,9 @@
 		                        <li>
 		                            <a href="/admin/job/apply_list"<?php if ($tab == 'job' && $subTab == 'apply_list') echo ' class="active"'; ?>>职位申请列表</a>
 		                        </li>
+		                        <li>
+		                            <a href="/admin/job/interview_list"<?php if ($tab == 'job' && $subTab == 'interview_list') echo ' class="active"'; ?>>面试列表</a>
+		                        </li>
 		                    </ul>
 		                </li>
 	

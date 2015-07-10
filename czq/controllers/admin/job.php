@@ -41,6 +41,21 @@ class Job extends Admin_Controller
         $this->load->view('admin/job_list', $data);
     }
 
+    public function view($id)
+    {
+        $data = $this->job_model->get_one(array('id' => $id, 'is_deleted' => 0));
+        if (empty($data)) {
+            show_404();
+        }
+        $company = $this->company_model->find($data['company_id']);
+        $data['company'] = $company['name'];
+        if (!empty($data['benefit'])) {
+            $data['benefit'] = json_decode($data['benefit'], true);
+        }
+
+        $this->load->view('admin/view_job', $data);
+    }
+
     public function editJob($id = 0)
     {
         $this->config->load('job', TRUE);
@@ -53,7 +68,7 @@ class Job extends Admin_Controller
                 'district' => '',
                 'company_id' => 0,
                 'working_years' => '',
-                'recuit_number' => 0,
+                'recruit_number' => 0,
                 'job_type' => '',
                 'benefit' => array(),
                 'requirement' => '',
@@ -150,55 +165,81 @@ class Job extends Admin_Controller
         $this->load->view('admin/apply_list', $data);
     }
 
-    public function add_interview($apply_id = 0)
+    public function interview_list()
     {
         $this->load->model('interview_model');
-        $address = $this->input->post('address');
-        $interview_time = $this->input->post('interview_time');
-        if (empty($address)) {
-            echo json_encode(array(
-                'code' => 0,
-                'data' => '请填写面试地点',
-            ));
-            exit;
-        }
-        if (empty($interview_time)) {
-            echo json_encode(array(
-                'code' => 0,
-                'data' => '请填写面试时间',
-            ));
-            exit;
-        }
-        if (!empty($apply_id)) {
-            $apply = $this->interview_model->find($apply_id, 'apply_id');
-            if (empty($apply)) {
-                echo json_encode(array(
-                    'code' => 0,
-                    'data' => '参数出错'
-                ));
-                exit;
-            }
-        }
-        $interview_time = strtotime($interview_time);
+        $offset = intval($this->input->get('o'));
+        $data   = array(
+            'interview_list' => array(),
+        );
 
-        if (empty($apply_id)) {
-            $this->interview_model->insert(array(
-                'apply_id' => $apply_id,
-                'address' => $address,
-                'interview_time' => $interview_time,
-                'create_time' => time(),
-                'update_time' => time(),
+        $count = $this->interview_model->get_count();
+        if ($count) {
+            $limit = $this->config->item('page_size');
+            $data['interview_list'] = $this->interview_model->interview_list_admin(array(), $limit, $offset);
+
+            $this->load->library('pagination');
+
+            $this->pagination->initialize_admin(array(
+                'base_url'    => preg_replace('/(.*)(\?|&)o=.*/', '$1', site_url($this->input->server('REQUEST_URI'))),
+                'total_rows'  => $count,
+                'per_page'    => $limit,
+                'page_query_string'    => true,
+                'query_string_segment' => 'o'
             ));
-        } else {
-            $this->interview_model->update(array(
-                'address' => $address,
-                'interview_time' => $interview_time,
-                'update_time' => time(),
-            ), array('apply_id' => $apply_id));
         }
-        echo json_encode(array(
-            'code' => 1,
-        ));
-        exit;
+
+        $this->load->view('admin/interview_list', $data);
+    }
+
+    public function editInterview($apply_id)
+    {
+        $this->load->model(array('apply_model', 'interview_model'));
+        $apply = $this->apply_model->find($apply_id);
+        if (empty($apply)) {
+            $data['error'] = '参数出错！';
+        } else {
+            $interview = $this->interview_model->find($apply_id, 'apply_id');
+            $data = array(
+                'edit_interview' => empty($interview) ? false : true,
+                'apply_id' => $apply_id,
+                'interview' => $interview ?: array(),
+                'status' => 0,
+            );
+
+            $post = $this->input->post();
+            if (!empty($post)) {
+                if (empty($post['interview_time'])) {
+                    $data['error'] = '请填写面试时间';
+                } elseif (empty($post['address'])) {
+                    $data['error'] = '请填写面试地点';
+                } else {
+                    $post['interview_time'] = strtotime($post['interview_time']);
+                    if (empty($interview)) {
+                        $this->interview_model->insert(array(
+                            'apply_id' => $apply_id,
+                            'address' => $post['address'],
+                            'interview_time' => $post['interview_time'],
+                            'create_time' => time(),
+                            'update_time' => time(),
+                        ));
+                        $this->apply_model->update(array(
+                            'status' => 1,
+                            'update_time' => time(),
+                        ), array('id' => $apply_id));
+                    } else {
+                        $this->interview_model->update(array(
+                            'address' => $post['address'],
+                            'interview_time' => $post['interview_time'],
+                            'update_time' => time(),
+                        ), array('apply_id' => $apply_id));
+                    }
+
+                    $data['status'] = 1;
+                }
+                $data['interview'] = array_merge($data['interview'], $post);
+            }
+            $this->load->view('admin/interview', $data);
+        }
     }
 }

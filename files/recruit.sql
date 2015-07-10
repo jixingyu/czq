@@ -47,7 +47,7 @@ CREATE TABLE `app_token` (
 
 /*Data for the table `app_token` */
 
-insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'81465d45b8324f98397e9e7452f8f1ae',1436410774,1439089174);
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'4bd625e378ac602c2149ad92c31287b9',1436518264,1439196664);
 
 /*Table structure for table `apply` */
 
@@ -58,15 +58,16 @@ CREATE TABLE `apply` (
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `job_id` int(11) unsigned NOT NULL DEFAULT '0',
   `resume_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(1) unsigned DEFAULT '0',
+  `status` tinyint(1) unsigned DEFAULT '0' COMMENT '0:申请中，1:发出面试，2:面试结束',
   `create_time` int(11) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_apply` (`user_id`,`job_id`,`resume_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `apply` */
 
-insert  into `apply`(`id`,`user_id`,`job_id`,`resume_id`,`status`,`create_time`) values (1,1,1,1,0,1436234815);
+insert  into `apply`(`id`,`user_id`,`job_id`,`resume_id`,`status`,`create_time`,`update_time`) values (3,1,1,1,1,1436515396,1436516061);
 
 /*Table structure for table `company` */
 
@@ -74,11 +75,11 @@ DROP TABLE IF EXISTS `company`;
 
 CREATE TABLE `company` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text,
-  `address` varchar(255) DEFAULT '',
-  `industry` varchar(255) DEFAULT '',
-  `number` int(11) unsigned DEFAULT '0',
+  `name` varchar(255) NOT NULL COMMENT '公司名',
+  `description` text COMMENT '公司介绍',
+  `address` varchar(255) DEFAULT '' COMMENT '地址',
+  `industry` varchar(255) DEFAULT '' COMMENT '所属行业',
+  `number` int(11) unsigned DEFAULT '0' COMMENT '公司人数',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -118,7 +119,7 @@ CREATE TABLE `interview` (
 
 /*Data for the table `interview` */
 
-insert  into `interview`(`apply_id`,`address`,`interview_time`,`create_time`,`update_time`) values (1,'苏州工业园区11',1436491500,1435578364,1436430482);
+insert  into `interview`(`apply_id`,`address`,`interview_time`,`create_time`,`update_time`) values (3,'苏州工业园区11',1437172200,1436516061,1436516061);
 
 /*Table structure for table `job` */
 
@@ -126,16 +127,16 @@ DROP TABLE IF EXISTS `job`;
 
 CREATE TABLE `job` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `degree` varchar(32) DEFAULT '',
-  `salary` varchar(16) DEFAULT '',
-  `district` varchar(16) DEFAULT '',
-  `company_id` int(11) unsigned DEFAULT '0',
-  `working_years` varchar(8) DEFAULT '',
-  `recuit_number` smallint(11) unsigned DEFAULT '0',
-  `job_type` varchar(8) DEFAULT '',
-  `benefit` text,
-  `requirement` text,
+  `name` varchar(255) NOT NULL COMMENT '职位名',
+  `degree` varchar(32) DEFAULT '' COMMENT '学历',
+  `salary` varchar(16) DEFAULT '' COMMENT '月薪',
+  `district` varchar(16) DEFAULT '' COMMENT '地区',
+  `company_id` int(11) unsigned DEFAULT '0' COMMENT '公司ID',
+  `working_years` varchar(8) DEFAULT '' COMMENT '工作年限',
+  `recruit_number` smallint(11) unsigned DEFAULT '0' COMMENT '招聘人数',
+  `job_type` varchar(8) DEFAULT '' COMMENT '职位类型',
+  `benefit` text COMMENT '福利',
+  `requirement` text COMMENT '任职要求',
   `is_deleted` tinyint(1) DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
@@ -144,7 +145,7 @@ CREATE TABLE `job` (
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recuit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498);
+insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recruit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498);
 
 /*Table structure for table `member` */
 
@@ -157,13 +158,15 @@ CREATE TABLE `member` (
   `real_name` varchar(255) NOT NULL DEFAULT '',
   `mobile` varchar(11) NOT NULL DEFAULT '',
   `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `create_time` int(11) unsigned DEFAULT '0',
+  `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 
-insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`) values (1,'ymx_4@163.com','cc1251c21d4bf83d944e3e1b1b58d3fa','','',1);
+insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`,`create_time`,`update_time`) values (1,'ymx_4@163.com','cc1251c21d4bf83d944e3e1b1b58d3fa','小明','13451234123',1,1436504441,1436504441),(7,'445346494@qq.com','5f2cd3608f804586f736df6519dcdcfa','arsene','13341234123',1,1436505835,1436506235);
 
 /*Table structure for table `resume` */
 
@@ -172,17 +175,17 @@ DROP TABLE IF EXISTS `resume`;
 CREATE TABLE `resume` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
-  `real_name` varchar(255) NOT NULL DEFAULT '',
-  `gender` tinyint(1) NOT NULL DEFAULT '0',
-  `birthday` int(11) unsigned NOT NULL DEFAULT '0',
-  `native_place` varchar(16) NOT NULL DEFAULT '',
-  `political_status` varchar(16) NOT NULL DEFAULT '',
-  `working_years` tinyint(1) NOT NULL DEFAULT '0',
-  `mobile` varchar(11) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `school` varchar(32) NOT NULL DEFAULT '',
-  `major` varchar(32) NOT NULL DEFAULT '',
-  `evaluation` text,
+  `real_name` varchar(255) NOT NULL DEFAULT '' COMMENT '姓名',
+  `gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别 0:女，1:男',
+  `birthday` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生日',
+  `native_place` varchar(16) NOT NULL DEFAULT '' COMMENT '籍贯',
+  `political_status` varchar(16) NOT NULL DEFAULT '' COMMENT '政治面貌',
+  `working_years` tinyint(1) NOT NULL DEFAULT '0' COMMENT '工作年限',
+  `mobile` varchar(11) NOT NULL DEFAULT '' COMMENT '手机',
+  `email` varchar(255) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `school` varchar(32) NOT NULL DEFAULT '' COMMENT '毕业院校',
+  `major` varchar(32) NOT NULL DEFAULT '' COMMENT '专业',
+  `evaluation` text COMMENT '自我评价',
   `personal_info_completed` tinyint(1) DEFAULT '0',
   `evaluation_completed` tinyint(1) DEFAULT '0',
   `experience_completed` tinyint(1) DEFAULT '0',

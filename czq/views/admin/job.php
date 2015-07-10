@@ -70,7 +70,7 @@
                         </div>
                         <div class="form-group">
                             <label>招聘人数</label>
-                            <input class="form-control" type="text" name="recuit_number" style="width:200px;" value="<?php if (!empty($job['recuit_number'])) echo $job['recuit_number'];?>">
+                            <input class="form-control" type="text" name="recruit_number" style="width:200px;" value="<?php if (!empty($job['recruit_number'])) echo $job['recruit_number'];?>">
                         </div>
                         <div class="form-group">
                             <label>职位类型</label>

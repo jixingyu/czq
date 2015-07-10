@@ -22,10 +22,9 @@ class Apply_model extends MY_Model
     }
 
     public function apply_list_admin($where, $limit, $offset = 0) {
-        $this->db->select("{$this->table}.id,{$this->table}.job_id,{$this->table}.create_time,{$this->table}.status,company.name as company,resume.real_name,resume.mobile,job.name as job,interview.address,interview.interview_time");
+        $this->db->select("{$this->table}.id,{$this->table}.job_id,{$this->table}.resume_id,{$this->table}.create_time,{$this->table}.status,member.email,company.name as company,job.name as job");
         $this->db->from($this->table);
-        $this->db->join('interview', "interview.apply_id = {$this->table}.id");
-        $this->db->join('resume', "resume.id = {$this->table}.resume_id");
+        $this->db->join('member', "member.user_id = apply.user_id");
         $this->db->join('job', "job.id = {$this->table}.job_id");
         $this->db->join('company', "company.id = job.company_id");
 

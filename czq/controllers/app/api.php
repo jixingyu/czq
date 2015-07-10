@@ -43,6 +43,23 @@ class Api extends App_Controller
         $count = $this->job_model->search_count($condition);
         if ($count) {
             $jobs = $this->job_model->search_jobs($condition, $limit, $offset);
+            $uid = $this->_get_uid(false);
+            if ($uid) {
+                $job_ids = array();
+                foreach ($jobs as $value) {
+                    $job_ids[] = $value['id'];
+                }
+                $this->load->model('favorite_model');
+                $favorites = $this->favorite_model->get_list_in($job_ids, 'job_id', array('user_id' => $uid), 'job_id');
+                if (!empty($favorites)) {
+                    foreach ($jobs as $k => $value) {
+                        $job_id = $value['id'];
+                        if (isset($favorites[$job_id])) {
+                            $jobs[$k]['is_favorited'] = 1;
+                        }
+                    }
+                }
+            }
         } else {
             $jobs = array();
         }
@@ -155,10 +172,25 @@ class Api extends App_Controller
             $this->response(api_error(90001, '请选择您要投递的简历！'), 200);
         }
 
-        $where = array('user_id' => $uid, 'job_id' => $job_id, 'resume_id' => $resume_id);
-        if (!$this->apply_model->get_count($where)) {
-            $where['create_time'] = time();
-            $this->apply_model->insert($where);
+        $apply = $this->apply_model->get_list(array(
+            'user_id' => $uid,
+            'job_id' => $job_id,
+            'resume_id' => $resume_id,
+        ), 1, 0, 'create_time');
+
+        if (empty($apply) || $apply[0]['status'] == 2) {
+            $current_time = time();
+            $this->apply_model->insert(array(
+                'user_id' => $uid,
+                'job_id' => $job_id,
+                'resume_id' => $resume_id,
+                'create_time' => $current_time,
+                'update_time' => $current_time,
+            ));
+        } elseif ($apply[0]['status'] == 0) {
+            $this->response(api_error(90001, '您已申请该职位，请等待面试通知'), 200);
+        } else {
+            $this->response(api_error(90001, '您已申请该职位'), 200);
         }
         $this->response(array('code' => 1), 200);
     }
