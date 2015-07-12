@@ -141,11 +141,11 @@ CREATE TABLE `job` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recruit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498);
+insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recruit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498),(3,'php','大专','0-2000','全城',1,'不限',1,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','php 1年工作经验',0,1436628908,1436628908),(4,'ios','大专','0-2000','全城',1,'不限',2,'全职','','要求吃苦耐劳',0,1436628939,1436628939),(5,'android','大专','0-2000','全城',1,'不限',3,'全职','[\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','加班！',0,1436628965,1436628965);
 
 /*Table structure for table `member` */
 

@@ -8,7 +8,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <?php echo $member['email']; ?>
             </div>
@@ -18,25 +18,21 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th><a href="/admin/company/editCompany"><i class="fa fa-plus-square"> 添加</a></th>
-                                <th>名称</th>
-                                <th>修改</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($company_list as $key => $row) :?>
-                            <tr id="tr<?php echo $row['id'];?>">
-                                <td><?php echo $key + 1;?></td>
-                                <td><?php echo $row['name'];?></td>
+                            <?php foreach ($user_resume as $key => $row) :?>
+                            <tr>
+                                <td><?php echo date('Y-m-d H:i:s', $row['update_time']);?></td>
                                 <td>
-                                    <a href="/admin/resume/<?php echo $row['id'];?>">查看简历</a>
+                                    <a href="/admin/resume/view/<?php echo $row['id'];?>">查看</a>
                                 </td>
                             </tr>
                             <?php endforeach;?>
                         </tbody>
                     </table>
-
-                    <?php if (!empty($company_list)) echo $this->pagination->create_links();?>
                 </div>
             </div>
             <!-- /.panel-body -->

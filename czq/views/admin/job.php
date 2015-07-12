@@ -9,7 +9,7 @@
 
         <div class="text-num">
             <form role="form" action="/admin/job/editJob<?php if (isset($job['id'])) echo '/' . $job['id'];?>" method="post" enctype="multipart/form-data">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         职位设置
                     </div>

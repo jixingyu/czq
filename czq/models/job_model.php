@@ -22,7 +22,7 @@ class Job_model extends MY_Model
 
     public function search_jobs($where, $limit, $offset = 0)
     {
-        $this->db->select($this->table . '.*,company.name as c_name,company.description as c_description,company.address as c_address,company.industry as c_industry,company.number as c_number');
+        $this->db->select("{$this->table}.id,{$this->table}.name as job,company.name as company,{$this->table}.degree,{$this->table}.salary,{$this->table}.update_time");
         $this->db->from($this->table);
         $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
         if (!empty($where['q'])) {
@@ -38,5 +38,16 @@ class Job_model extends MY_Model
             $this->db->limit($limit, $offset);
         }
         return $this->db->get()->result_array();
+    }
+
+    public function job_detail($job_id)
+    {
+        $this->db->select($this->table . '.*,company.name as c_name,company.description as c_description,company.address as c_address,company.industry as c_industry,company.number as c_number');
+        $this->db->from($this->table);
+        $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
+
+        $this->db->where(array("{$this->table}.id" => $job_id));
+
+        return $this->db->get()->row_array();
     }
 }

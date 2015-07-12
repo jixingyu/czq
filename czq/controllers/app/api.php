@@ -75,6 +75,17 @@ class Api extends App_Controller
         ), 200);
     }
 
+    public function job_get()
+    {
+        $this->load->model('job_model');
+        $id = $this->get('job_id');
+
+        return $this->response(array(
+            'code' => 1,
+            'data' => $this->job_model->job_detail($id),
+        ), 200);
+    }
+
     public function favorite_list_get()
     {
         $this->load->model('favorite_model');
@@ -177,8 +188,16 @@ class Api extends App_Controller
             'job_id' => $job_id,
             'resume_id' => $resume_id,
         ), 1, 0, 'create_time');
+        $interview_expire = false;
+        if (!empty($apply) && $apply['status'] == 1) {
+            $this->load->model('interview_model');
+            $interview = $this->interview_model->find($apply['id'], 'apply_id');
+            if ($interview['interview_time'] < time()) {
+                $interview_expire = true;
+            }
+        }
 
-        if (empty($apply) || $apply[0]['status'] == 2) {
+        if (empty($apply) || $interview_expire) {
             $current_time = time();
             $this->apply_model->insert(array(
                 'user_id' => $uid,

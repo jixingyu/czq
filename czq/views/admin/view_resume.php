@@ -14,7 +14,7 @@ ul {
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 简历信息
             </div>
@@ -78,6 +78,38 @@ ul {
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
+        <?php if (!empty($experiences)) : ?>
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                工作经验
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>公司</th>
+                                <th>工作内容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($experiences as $row) { ?>
+                            <tr>
+                                <td><?php echo date('Y-m-d', $row['start_time']);?> ~ <?php echo $row['end_time'] ? date('Y-m-d', $row['end_time']) : '至今';?></td>
+                                <td><?php echo $row['company']; ?></td>
+                                <td><?php echo $row['description']; ?></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+        <?php endif; ?>
     </div>
 </div>
 

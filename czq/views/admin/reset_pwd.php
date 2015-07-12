@@ -9,7 +9,7 @@
 
         <div class="text-num">
             <form role="form" action="/admin/member/resetPwd/<?php echo $member_id;?>" method="post">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         修改密码
                     </div>

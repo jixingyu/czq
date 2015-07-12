@@ -8,7 +8,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 用户列表
             </div>
@@ -36,6 +36,7 @@
                                 <td><?php echo $row['is_active'] ? '已激活' : '未激活';?></td>
                                 <td>
                                     <a href="/admin/member/editMember/<?php echo $row['user_id'];?>">修改</a>
+                                    <a href="/admin/resume/userResume/<?php echo $row['user_id'];?>">简历</a>
                                 </td>
                             </tr>
                             <?php endforeach;?>

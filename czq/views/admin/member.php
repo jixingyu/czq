@@ -9,7 +9,7 @@
 
         <div class="text-num">
             <form role="form" action="/admin/member/editMember<?php if (isset($member['user_id'])) echo '/' . $member['user_id'];?>" method="post">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         用户设置
                     </div>

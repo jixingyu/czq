@@ -9,7 +9,7 @@
 
         <div class="text-num">
             <form role="form" action="/admin/company/editCompany<?php if (isset($company['id'])) echo '/' . $company['id'];?>" method="post" enctype="multipart/form-data">
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         公司设置
                     </div>
