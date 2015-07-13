@@ -6,7 +6,7 @@ class resume_model extends MY_Model
 
     public function resume_list($where = array(), $limit, $offset)
     {
-    	$this->db->select('create_time');
+    	$this->db->select('resume_name');
         $this->db->from($this->table);
         if (!empty($where)) {
             $this->db->where($where);

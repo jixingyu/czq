@@ -83,13 +83,17 @@
 		                        </li>
 		                    </ul>
 		                </li>
-	
+
 		                <li<?php echo ($tab == 'company') ? ' class="active"' : '';?>>
 		                    <a href="/admin/company"><i class="fa fa-edit fa-fw"></i> 公司管理</a>
 		                </li>
-	
+
 		                <li<?php echo ($tab == 'member') ? ' class="active"' : '';?>>
 		                    <a href="/admin/member"><i class="fa fa-edit fa-fw"></i> 用户管理</a>
+		                </li>
+
+		                <li<?php echo ($tab == 'app_config' && $subTab == 'about') ? ' class="active"' : '';?>>
+		                    <a href="/admin/app_config/about"><i class="fa fa-edit fa-fw"></i> 关于我们</a>
 		                </li>
 		            </ul>
 		        </div>

@@ -92,7 +92,7 @@
                         </div>
                         <div class="form-group">
                             <label>任职要求</label>
-                            <textarea class="form-control" name="requirement"><?php if (!empty($job['requirement'])) echo $job['requirement'];?></textarea>
+                            <textarea class="form-control" rows="5" name="requirement"><?php if (!empty($job['requirement'])) echo $job['requirement'];?></textarea>
                         </div>
                     </div>
                 </div>

@@ -22,6 +22,22 @@ class Api extends App_Controller
         ), 200);
     }
 
+    public function about_get()
+    {
+        $this->load->model('app_config_model');
+        $result = $this->app_config_model->get_list(array('module' => 'about'));
+        $about = array();
+        foreach ($result as $value) {
+            $k = $value['cf_key'];
+            $about[$k] = $value['cf_value'];
+        }
+
+        return $this->response(array(
+            'code' => 1,
+            'data' => $about,
+        ), 200);
+    }
+
     public function job_list_get()
     {
         $this->load->model('job_model');
@@ -55,7 +71,7 @@ class Api extends App_Controller
                     foreach ($jobs as $k => $value) {
                         $job_id = $value['id'];
                         if (isset($favorites[$job_id])) {
-                            $jobs[$k]['is_favorited'] = 1;
+                            $jobs[$k]['is_favorite'] = 1;
                         }
                     }
                 }
@@ -128,14 +144,14 @@ class Api extends App_Controller
             $this->favorite_model->delete($where);
             $this->response(array(
                 'code' => 1,
-                'is_favorited' => 0,
+                'is_favorite' => 0,
             ), 200);
         } else {
             $where['create_time'] = time();
             $this->favorite_model->insert($where);
             $this->response(array(
                 'code' => 1,
-                'is_favorited' => 0,
+                'is_favorite' => 0,
             ), 200);
         }
     }

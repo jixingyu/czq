@@ -51,16 +51,64 @@ class Resume_api extends App_Controller
         ), 200);
     }
 
+    public function add_resume_get()
+    {
+        $uid = $this->_get_uid();
+        $count = $this->resume_model->get_count(array('user_id' => $uid));
+        $limit = $this->config->item('resume_limit');
+        if ($count >= $limit) {
+            $this->response(api_error(90001, '最多可创建' . $limit . '份简历！'), 200);
+        }
+
+        $resume_id = $this->resume_model->insert(array(
+            'create_time' => time(),
+            'update_time' => time(),
+            'user_id'     => $uid,
+            'resume_name' => '未命名简历',
+        ));
+        $this->response(array('code' => 1, 'data' => array(
+            'resume_id' => $resume_id,
+            'resume_name' => '未命名简历',
+        )), 200);
+    }
+
+    public function resume_name_post()
+    {
+        $uid = $this->_get_uid();
+        $resume_id = intval($this->post('resume_id'));
+        if (!$resume_id) {
+            $this->response(api_error(400), 200);
+        }
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        if (empty($resume)) {
+            $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
+        }
+
+        $resume_name = trim($this->post('resume_name'));
+        if (empty($resume_name)) {
+            $this->response(api_error(90001, '请填写简历名称！'), 200);
+        }
+
+        $this->resume_model->update(array(
+            'resume_name' => $resume_name,
+            'update_time' => time(),
+        ), array(
+            'id' => $resume_id,
+            'user_id' => $user_id
+        ));
+        $this->response(array('code' => 1), 200);
+    }
+
     public function resume_post()
     {
         $uid = $this->_get_uid();
         $resume_id = intval($this->post('resume_id'));
         if (!$resume_id) {
-            $count = $this->resume_model->get_count(array('user_id' => $uid));
-            $limit = $this->config->item('resume_limit');
-            if ($count >= $limit) {
-                $this->response(api_error(90001, '最多可保存' . $limit . '份简历！'), 200);
-            }
+            $this->response(api_error(400), 200);
+        }
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        if (empty($resume)) {
+            $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
         }
 
         $set = array('personal_info_completed' => 1);
@@ -136,19 +184,12 @@ class Resume_api extends App_Controller
             $set['personal_info_completed'] = 0;
         }
 
-        if ($resume_id) {
-            $set['update_time'] = time();
-            $this->resume_model->update($set, array(
-                'id' => $resume_id,
-                'user_id' => $user_id
-            ));
-            $this->response(array('code' => 1), 200);
-        } else {
-            $set['create_time'] = $set['update_time'] = time();
-            $set['user_id'] = $user_id;
-            $resume_id = $this->resume_model->insert($set);
-            $this->response(array('code' => 1, 'data' => $resume_id), 200);
-        }
+        $set['update_time'] = time();
+        $this->resume_model->update($set, array(
+            'id' => $resume_id,
+            'user_id' => $user_id
+        ));
+        $this->response(array('code' => 1), 200);
     }
 
     public function experience_list_get()
@@ -247,7 +288,7 @@ class Resume_api extends App_Controller
         }
         $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
         if (empty($resume)) {
-            $this->response(api_error(90001, '该简历不存在！'), 200);
+            $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
         }
         $set = array('evaluation' => $this->post('evaluation'), 'update_time' => time());
         if (empty($set['evaluation'])) {

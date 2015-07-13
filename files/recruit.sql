@@ -32,6 +32,23 @@ CREATE TABLE `admin_member` (
 
 insert  into `admin_member`(`uid`,`username`,`password`) values (1,'admin','2cd20a9777fa019d63dc8e918fa8ee33799992f9');
 
+/*Table structure for table `app_config` */
+
+DROP TABLE IF EXISTS `app_config`;
+
+CREATE TABLE `app_config` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `module` varchar(64) NOT NULL DEFAULT '',
+  `cf_key` varchar(64) NOT NULL DEFAULT '',
+  `cf_value` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_config` (`module`,`cf_key`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+/*Data for the table `app_config` */
+
+insert  into `app_config`(`id`,`module`,`cf_key`,`cf_value`) values (1,'about','introduction','  握手APP是一款牛逼的APP!\r\n  快来加入!'),(2,'about','phone','12345578'),(3,'about','qq','12345678');
+
 /*Table structure for table `app_token` */
 
 DROP TABLE IF EXISTS `app_token`;
@@ -47,7 +64,7 @@ CREATE TABLE `app_token` (
 
 /*Data for the table `app_token` */
 
-insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'4bd625e378ac602c2149ad92c31287b9',1436518264,1439196664);
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'f0d635b08e0df52ab0d35dc9c195ec0a',1436770635,1439449035);
 
 /*Table structure for table `apply` */
 
@@ -115,7 +132,7 @@ CREATE TABLE `interview` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`apply_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Data for the table `interview` */
 
@@ -141,11 +158,11 @@ CREATE TABLE `job` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `job` */
 
-insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recruit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498),(3,'php','大专','0-2000','全城',1,'不限',1,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','php 1年工作经验',0,1436628908,1436628908),(4,'ios','大专','0-2000','全城',1,'不限',2,'全职','','要求吃苦耐劳',0,1436628939,1436628939),(5,'android','大专','0-2000','全城',1,'不限',3,'全职','[\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','加班！',0,1436628965,1436628965);
+insert  into `job`(`id`,`name`,`degree`,`salary`,`district`,`company_id`,`working_years`,`recruit_number`,`job_type`,`benefit`,`requirement`,`is_deleted`,`create_time`,`update_time`) values (1,'职位1','中专','0-2000','平江区',1,'1-2年',2,'全职','[\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\"]','test',0,1435570742,1436431338),(2,'职位2','本科','5000-10000','全城',2,'1-3年',3,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','无',0,1436431383,1436431498),(3,'php','大专','0-2000','全城',1,'不限',1,'全职','[\"\\u4e94\\u9669\\u4e00\\u91d1\",\"\\u7ee9\\u6548\\u5956\\u91d1\",\"\\u9910\\u8865\",\"\\u5e26\\u85aa\\u5e74\\u5047\",\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','php 1年工作经验',0,1436628908,1436628908),(4,'ios','大专','0-2000','全城',1,'不限',2,'全职','','要求吃苦耐劳',0,1436628939,1436628939),(5,'android','大专','0-2000','全城',1,'不限',3,'全职','[\"\\u5458\\u5de5\\u65c5\\u6e38\",\"\\u8282\\u65e5\\u798f\\u5229\"]','加班！',0,1436628965,1436628965),(6,'服务员','不限','0-2000','平江区',1,'1-3年',4,'兼职','','吃苦耐劳\r\n五官端正\r\n测试测试测试测试测试测试\r\n测试测试测试测试测试测试1123\r\n测试测试测试测试测试测试1435354',0,1436750709,1436750709);
 
 /*Table structure for table `member` */
 
@@ -175,6 +192,7 @@ DROP TABLE IF EXISTS `resume`;
 CREATE TABLE `resume` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
+  `resume_name` varchar(255) DEFAULT '' COMMENT '简历名称',
   `real_name` varchar(255) NOT NULL DEFAULT '' COMMENT '姓名',
   `gender` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别 0:女，1:男',
   `birthday` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生日',
@@ -196,7 +214,7 @@ CREATE TABLE `resume` (
 
 /*Data for the table `resume` */
 
-insert  into `resume`(`id`,`user_id`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`evaluation`,`personal_info_completed`,`evaluation_completed`,`experience_completed`,`create_time`,`update_time`) values (1,1,'',0,0,'','',0,'','','','',NULL,0,0,0,1436234729,1436234729);
+insert  into `resume`(`id`,`user_id`,`resume_name`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`evaluation`,`personal_info_completed`,`evaluation_completed`,`experience_completed`,`create_time`,`update_time`) values (1,1,'未命名简历','',0,0,'','',0,'','','','',NULL,0,0,0,1436234729,1436234729);
 
 /*Table structure for table `work_experience` */
 
