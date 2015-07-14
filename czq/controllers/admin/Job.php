@@ -84,6 +84,7 @@ class Job extends Admin_Controller
             'company_list' => $this->company_model->get_list(),
             'status' => 0,
         );
+        array_shift($data['district_list']);
 
         if ($id) {
             $data['job'] = $this->job_model->get_one(array('id' => $id, 'is_deleted' => 0));

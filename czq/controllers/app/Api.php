@@ -46,7 +46,7 @@ class Api extends App_Controller
         $page = $this->get('page');
         $page = $page ? $page : 1;
         $condition = array();
-        if (!empty($q)) {
+        if (!empty($q) && $q != '全城') {
         	$condition['q'] = $q;
         }
         if (!empty($district)) {

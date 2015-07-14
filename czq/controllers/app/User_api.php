@@ -19,9 +19,7 @@ class User_api extends App_Controller
             $this->response(api_error(400), 200);
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->response(array(
-                'error' => api_error(90001, '请填写正确的邮箱地址！'),
-            ), 200);
+            $this->response(api_error(90001, '请填写正确的邮箱地址！'), 200);
         }
 
         $check_email = $this->member_model->find($email, 'email');
@@ -103,7 +101,7 @@ class User_api extends App_Controller
 
     public function verify_token_get()
     {
-        $token  = $this->get('token');
+        $token = $this->get('token');
         if (!$token) {
             $this->response(api_error(400), 200);
         }
@@ -115,7 +113,7 @@ class User_api extends App_Controller
             $response = array(
                 'code'   => 1,
                 'user'   => $user,
-                'token'  => $token
+                'token'  => $new_token
             );
         } else {
             $response = api_error(40102);

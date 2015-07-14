@@ -150,9 +150,7 @@ class Resume_api extends App_Controller
 
         $mobile = trim($this->post('mobile'));
         if (!@preg_match('/^1[3-9][0-9]{9}$/', $mobile)) {
-            $this->response(array(
-                'error' => api_error(90001, '请填写正确的手机号！'),
-            ), 200);
+            $this->response(api_error(90001, '请填写正确的手机号！'), 200);
         } else {
             $set['mobile'] = $mobile;
         }
@@ -160,9 +158,7 @@ class Resume_api extends App_Controller
         $email = trim($this->post('email'));
         if ($email) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->response(array(
-                    'error' => api_error(90001, '请填写正确的邮箱地址！'),
-                ), 200);
+                $this->response(api_error(90001, '请填写正确的邮箱地址！'), 200);
             } else {
                 $set['email'] = $email;
             }

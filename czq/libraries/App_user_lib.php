@@ -54,7 +54,7 @@ class App_user_lib extends Abstract_user_lib
             $this->CI->app_token_model->delete(array(
                 'user_id' => $result['user_id']
             ));
-            // logout moore8
+            // logout
             $this->logout();
             return false;
         } else {
@@ -97,7 +97,7 @@ class App_user_lib extends Abstract_user_lib
                     );
                     $user['is_active'] = 1;
                 } else {
-                    return $user;
+                    return $this->format_user($user);
                 }
             }
             // save token
@@ -119,6 +119,7 @@ class App_user_lib extends Abstract_user_lib
                     'token'  => $token
                 )
             ));
+            $user = $this->format_user($user);
             $this->CI->cache->save('app_user_' . $uid, $user, 3600);
             $user['token'] = $token;
             return $user;
@@ -164,7 +165,7 @@ class App_user_lib extends Abstract_user_lib
         if (empty($user)) {
             $this->CI->load->model('member_model');
             $user = $this->CI->member_model->find($uid, 'user_id');
-
+            $user = $this->format_user($user);
             $this->CI->cache->save('app_user_' . $uid, $user, 3600);
         }
         if (!empty($key)) {
@@ -173,6 +174,15 @@ class App_user_lib extends Abstract_user_lib
             $result = $user;
         }
         return $result;
+    }
+
+    public function format_user($user) {
+        return array(
+            'email' => $user['email'],
+            'real_name' => $user['real_name'],
+            'mobile' => $user['mobile'],
+            'is_active' => $user['is_active'],
+        );
     }
 
     private function _gen_token($uid) {
