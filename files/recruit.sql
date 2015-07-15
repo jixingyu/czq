@@ -64,7 +64,7 @@ CREATE TABLE `app_token` (
 
 /*Data for the table `app_token` */
 
-insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'f0d635b08e0df52ab0d35dc9c195ec0a',1436770635,1439449035);
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'dea0364eeff9924b33351ca32b21c08b',1436945403,1439623803);
 
 /*Table structure for table `apply` */
 
@@ -179,11 +179,28 @@ CREATE TABLE `member` (
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 
-insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`,`create_time`,`update_time`) values (1,'ymx_4@163.com','cc1251c21d4bf83d944e3e1b1b58d3fa','小明','13451234123',1,1436504441,1436504441),(7,'445346494@qq.com','5f2cd3608f804586f736df6519dcdcfa','arsene','13341234123',1,1436505835,1436506235);
+insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`,`create_time`,`update_time`) values (1,'ymx_4@163.com','f59212fad079c49084ed93ddc8cab1bf','小明','13451234123',1,1436504441,1436504441),(7,'445346494@qq.com','5f2cd3608f804586f736df6519dcdcfa','arsene','13341234123',1,1436505835,1436506235);
+
+/*Table structure for table `pass_token` */
+
+DROP TABLE IF EXISTS `pass_token`;
+
+CREATE TABLE `pass_token` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(40) NOT NULL,
+  `type` tinyint(1) unsigned NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`email`,`type`),
+  UNIQUE KEY `uniq_token` (`token`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/*Data for the table `pass_token` */
+
+insert  into `pass_token`(`email`,`token`,`type`,`expires`) values ('ymx_4@163.com','7b0b149071a95ccb89b353f99f5b40e3',1,0);
 
 /*Table structure for table `resume` */
 

@@ -88,16 +88,17 @@ class Passport extends Front_Controller
     {
         $this->load->library('email');
         $config['protocol'] = 'smtp';
-        $config['smtp_host'] = 'smtp.163.com';
-        $config['smtp_user'] = 'wszpapp@163.com';
-        $config['smtp_pass'] = 'wszpapppass';
+        $config['smtp_host'] = 'smtp.qq.com';
+        $config['smtp_user'] = '445346494@qq.com';
+        $config['smtp_pass'] = 'test1111';
         $config['smtp_port'] = '25';
         $config['charset'] = 'utf-8';
-        // $config['wordwrap'] = TRUE;
-        // $config['mailtype'] = 'html';
+        $config['newline'] = "\r\n";
+        $config['wordwrap'] = TRUE;
+        $config['mailtype'] = 'html';
         $this->email->initialize($config);
 
-        $this->email->from('wszpapp@163.com', '握手招聘');
+        $this->email->from('445346494@qq.com', '握手招聘');
         $this->email->to($email);
 
         $this->email->subject('握手招聘 - 找回密码');
@@ -107,6 +108,7 @@ class Passport extends Front_Controller
 点击 <a href="%s">此处</a> 修改您的密码。
 EOT;
         $msg = sprintf($msg, $email, $date, $link);
+
         $this->email->message($msg);
 
         return $this->email->send();
