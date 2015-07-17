@@ -38,4 +38,17 @@ class Apply_model extends MY_Model
         $this->db->order_by('create_time', 'desc');
         return $this->db->get()->result_array();
     }
+
+    public function check_apply($where) {
+        $this->db->select('create_time');
+        $this->db->from($this->table);
+        $this->db->where($where);
+
+        $this->db->order_by('create_time', 'desc');
+
+        $this->db->limit(1, 0);
+
+        $result = $this->db->get()->row_array();
+        return $result;
+    }
 }

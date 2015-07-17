@@ -15,6 +15,7 @@ class Api extends App_Controller
             'salary' => $this->config->item('salary', 'job'),
             'district' => $this->config->item('district', 'job'),
             'working_years' => $this->config->item('working_years', 'job'),
+            'resume_limit'  => $this->config->item('resume_limit'),
         );
         return $this->response(array(
             'code' => 1,
@@ -46,10 +47,10 @@ class Api extends App_Controller
         $page = $this->get('page');
         $page = $page ? $page : 1;
         $condition = array();
-        if (!empty($q) && $q != '全城') {
+        if (!empty($q)) {
         	$condition['q'] = $q;
         }
-        if (!empty($district)) {
+        if (!empty($district) && $district != '全城') {
         	$condition['district'] = $district;
         }
 
@@ -62,8 +63,9 @@ class Api extends App_Controller
             $uid = $this->_get_uid(false);
             if ($uid) {
                 $job_ids = array();
-                foreach ($jobs as $value) {
+                foreach ($jobs as $k => $value) {
                     $job_ids[] = $value['id'];
+                    $jobs[$k]['is_favorite'] = 0;
                 }
                 $this->load->model('favorite_model');
                 $favorites = $this->favorite_model->get_list_in($job_ids, 'job_id', array('user_id' => $uid), 'job_id');
@@ -74,6 +76,10 @@ class Api extends App_Controller
                             $jobs[$k]['is_favorite'] = 1;
                         }
                     }
+                }
+            } else {
+                foreach ($jobs as $k => $value) {
+                    $jobs[$k]['is_favorite'] = 0;
                 }
             }
         } else {
@@ -95,10 +101,27 @@ class Api extends App_Controller
     {
         $this->load->model('job_model');
         $id = $this->get('job_id');
+        $uid = $this->_get_uid(false);
+        $job = $this->job_model->job_detail($id);
+        if (empty($job)) {
+            $this->response(api_error(400), 200);
+        }
+        $job['is_favorite'] = $job['applied'] = 0;
+        if ($uid) {
+            $this->load->model(array('favorite_model', 'apply_model'));
+            $exist = $this->favorite_model->get_count(array('user_id' => $uid, 'job_id' => $id));
+            if ($exist) {
+                $job['is_favorite'] = 1;
+            }
+
+            if ($this->_check_apply($uid, $id)) {
+                $job['applied'] = 1;
+            }
+        }
 
         return $this->response(array(
             'code' => 1,
-            'data' => $this->job_model->job_detail($id),
+            'data' => $job,
         ), 200);
     }
 
@@ -115,6 +138,11 @@ class Api extends App_Controller
         $count = $this->favorite_model->get_count(array('user_id' => $uid));
         if ($count) {
             $favorites = $this->favorite_model->favorite_list(array('user_id' => $uid), $limit, $offset);
+
+            $job_ids = array();
+            foreach ($favorites as $k => $value) {
+                $favorites[$k]['is_favorite'] = 1;
+            }
         } else {
             $favorites = array();
         }
@@ -151,7 +179,7 @@ class Api extends App_Controller
             $this->favorite_model->insert($where);
             $this->response(array(
                 'code' => 1,
-                'is_favorite' => 0,
+                'is_favorite' => 1,
             ), 200);
         }
     }
@@ -169,6 +197,23 @@ class Api extends App_Controller
         $count = $this->apply_model->get_count(array('user_id' => $uid));
         if ($count) {
             $applys = $this->apply_model->apply_list(array('user_id' => $uid), $limit, $offset);
+
+            $job_ids = array();
+            foreach ($applys as $k => $value) {
+                $job_ids[] = $value['job_id'];
+                $applys[$k]['is_favorite'] = 0;
+            }
+            $this->load->model('favorite_model');
+            $favorites = $this->favorite_model->get_list_in($job_ids, 'job_id', array('user_id' => $uid), 'job_id');
+            if (!empty($favorites)) {
+                foreach ($applys as $k => $value) {
+                    $job_id = $value['job_id'];
+                    if (isset($favorites[$job_id])) {
+                        $applys[$k]['is_favorite'] = 1;
+                    }
+                }
+            }
+
         } else {
             $applys = array();
         }
@@ -199,21 +244,7 @@ class Api extends App_Controller
             $this->response(api_error(90001, '请选择您要投递的简历！'), 200);
         }
 
-        $apply = $this->apply_model->get_list(array(
-            'user_id' => $uid,
-            'job_id' => $job_id,
-            'resume_id' => $resume_id,
-        ), 1, 0, 'create_time');
-        $interview_expire = false;
-        if (!empty($apply) && $apply['status'] == 1) {
-            $this->load->model('interview_model');
-            $interview = $this->interview_model->find($apply['id'], 'apply_id');
-            if ($interview['interview_time'] < time()) {
-                $interview_expire = true;
-            }
-        }
-
-        if (empty($apply) || $interview_expire) {
+        if ($this->_check_apply($uid, $job_id)) {
             $current_time = time();
             $this->apply_model->insert(array(
                 'user_id' => $uid,
@@ -222,8 +253,6 @@ class Api extends App_Controller
                 'create_time' => $current_time,
                 'update_time' => $current_time,
             ));
-        } elseif ($apply[0]['status'] == 0) {
-            $this->response(api_error(90001, '您已申请该职位，请等待面试通知'), 200);
         } else {
             $this->response(api_error(90001, '您已申请该职位'), 200);
         }
@@ -256,5 +285,18 @@ class Api extends App_Controller
                 'total'     => $count,
             ),
         ), 200);
+    }
+
+    public function _check_apply($uid, $job_id)
+    {
+        $apply = $this->apply_model->check_apply(array(
+            'user_id' => $uid,
+            'job_id' => $job_id,
+        ));
+        if (!empty($apply) && $apply['create_time'] > time() - 86400 * $this->config->item('apply_days')) {// 指定天数之内申请过
+            return false;
+        } else {
+            return true;
+        }
     }
 }

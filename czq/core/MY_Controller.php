@@ -120,9 +120,7 @@ class App_Controller extends REST_Controller
             if ($result['code'] == 1) {
                 return $result['uid'];
             } else {
-                $this->response(array(
-                    'error' => api_error($result['code']),
-                ), 200);
+                $this->response(api_error($result['code']), 200);
             }
         } else {
             if ($result['code'] == 1) {
