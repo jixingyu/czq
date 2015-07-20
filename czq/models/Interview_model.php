@@ -4,11 +4,23 @@ class Interview_model extends MY_Model
 {
     public $table = 'interview';
 
+    public function interview_count($where) {
+        $this->db->from($this->table);
+        if (isset($where['user_id'])) {
+            $this->db->join('apply', "apply.id = {$this->table}.apply_id");
+        }
+        if (!empty($where)) {
+            $this->db->where($where);
+        }
+
+        return $this->db->count_all_results();
+    }
+
     public function interview_list($where, $limit, $offset = 0) {
         $this->db->select("{$this->table}.address,apply.job_id,interview_time,company.name as company,job.name as job");
         $this->db->from($this->table);
         $this->db->join('apply', "apply.id = {$this->table}.apply_id");
-        $this->db->join('job', "job.id = {$this->table}.job_id");
+        $this->db->join('job', "job.id = apply.job_id");
         $this->db->join('company', "company.id = job.company_id");
 
         if (!empty($where)) {

@@ -14,7 +14,7 @@ class Prompt_api extends App_Controller
         return $this->response(array(
             'code' => 1,
             'data' => array(
-                'resume_num' => $this->resume_model->get_count(array('user_id' => $user_id)),
+                'resume_num' => $this->resume_model->get_count(array('user_id' => $user_id, 'is_deleted' => 0)),
                 'apply_num' => $this->apply_model->get_count(array('user_id' => $user_id)),
                 'favorite_num' => $this->favorite_model->get_count(array('user_id' => $user_id)),
             )

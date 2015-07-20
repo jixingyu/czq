@@ -17,9 +17,9 @@ class Resume_api extends App_Controller
         $limit = $this->config->item('app_page_size');
         $offset = $limit * ($page-1);
 
-        $count = $this->resume_model->get_count(array('user_id' => $uid));
+        $count = $this->resume_model->get_count(array('user_id' => $uid, 'is_deleted' => 0));
         if ($count) {
-            $resumes = $this->resume_model->resume_list(array('user_id' => $uid), $limit, $offset);
+            $resumes = $this->resume_model->resume_list(array('user_id' => $uid, 'is_deleted' => 0), $limit, $offset);
         } else {
             $resumes = array();
         }
@@ -44,7 +44,7 @@ class Resume_api extends App_Controller
             $this->response(api_error(400), 200);
         }
 
-        $resume = $this->resume_model->get_one(array('user_id' => $uid, 'resume_id' => $resume_id));
+        $resume = $this->resume_model->get_one(array('user_id' => $uid, 'resume_id' => $resume_id, 'is_deleted' => 0));
         return $this->response(array(
             'code' => 1,
             'data' => $resume,
@@ -54,7 +54,7 @@ class Resume_api extends App_Controller
     public function add_resume_get()
     {
         $uid = $this->_get_uid();
-        $count = $this->resume_model->get_count(array('user_id' => $uid));
+        $count = $this->resume_model->get_count(array('user_id' => $uid, 'is_deleted' => 0));
         $limit = $this->config->item('resume_limit');
         if ($count >= $limit) {
             $this->response(api_error(90001, '最多可创建' . $limit . '份简历！'), 200);
@@ -79,7 +79,7 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($resume)) {
             $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
         }
@@ -106,7 +106,7 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($resume)) {
             $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
         }
@@ -188,6 +188,21 @@ class Resume_api extends App_Controller
         $this->response(array('code' => 1), 200);
     }
 
+    public function resume_delete()
+    {
+        $uid = $this->_get_uid();
+        $resume_id = intval($this->delete('resume_id'));
+        if (!$resume_id) {
+            $this->response(api_error(400), 200);
+        }
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
+        if (empty($resume)) {
+            $this->response(api_error(90001, '该简历不存在！'), 200);
+        }
+        $this->resume_model->update(array('is_deleted' => 1), array('id' => $resume_id));
+        $this->response(array('code' => 1), 200);
+    }
+
     public function experience_list_get()
     {
         $this->load->model('work_experience_model');
@@ -198,7 +213,7 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid));
+        $exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($exist)) {
             $this->response(api_error(90001, '该简历不存在！'), 200);
         }
@@ -233,7 +248,7 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($resume)) {
             $this->response(api_error(90001, '该简历不存在！'), 200);
         }
@@ -275,6 +290,26 @@ class Resume_api extends App_Controller
         $this->response(array('code' => 1), 200);
     }
 
+    public function experience_delete()
+    {
+        $this->load->model('work_experience_model');
+        $uid = $this->_get_uid();
+        $experience_id = intval($this->delete('experience_id'));
+        if (!$experience_id) {
+            $this->response(api_error(400), 200);
+        }
+        $experience = $this->work_experience_model->find($experience_id);
+        if (empty($experience)) {
+            $this->response(api_error(400), 200);
+        }
+        $resume = $this->resume_model->get_one(array('id' => $experience['resume_id'], 'user_id' => $uid, 'is_deleted' => 0));
+        if (empty($resume)) {
+            $this->response(api_error(90001, '该简历不存在！'), 200);
+        }
+        $this->work_experience_model->delete(array('id' => $experience_id));
+        $this->response(array('code' => 1), 200);
+    }
+
     public function evaluation_post()
     {
         $uid = $this->_get_uid();
@@ -282,7 +317,7 @@ class Resume_api extends App_Controller
         if (!$resume_id) {
             $this->response(api_error(400), 200);
         }
-        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid));
+        $resume = $this->resume_model->get_one(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($resume)) {
             $this->response(api_error(90001, '您要编辑的简历不存在！'), 200);
         }

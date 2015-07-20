@@ -64,14 +64,14 @@ class Api extends App_Controller
             if ($uid) {
                 $job_ids = array();
                 foreach ($jobs as $k => $value) {
-                    $job_ids[] = $value['id'];
+                    $job_ids[] = $value['job_id'];
                     $jobs[$k]['is_favorite'] = 0;
                 }
                 $this->load->model('favorite_model');
                 $favorites = $this->favorite_model->get_list_in($job_ids, 'job_id', array('user_id' => $uid), 'job_id');
                 if (!empty($favorites)) {
                     foreach ($jobs as $k => $value) {
-                        $job_id = $value['id'];
+                        $job_id = $value['job_id'];
                         if (isset($favorites[$job_id])) {
                             $jobs[$k]['is_favorite'] = 1;
                         }
@@ -114,7 +114,7 @@ class Api extends App_Controller
                 $job['is_favorite'] = 1;
             }
 
-            if ($this->_check_apply($uid, $id)) {
+            if (!$this->_check_apply($uid, $id)) {
                 $job['applied'] = 1;
             }
         }
@@ -239,7 +239,7 @@ class Api extends App_Controller
         if (empty($job_exist)) {
             $this->response(api_error(90001, '您申请的职位不存在！'), 200);
         }
-        $resume_exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid));
+        $resume_exist = $this->resume_model->get_count(array('id' => $resume_id, 'user_id' => $uid, 'is_deleted' => 0));
         if (empty($resume_exist)) {
             $this->response(api_error(90001, '请选择您要投递的简历！'), 200);
         }
@@ -269,7 +269,7 @@ class Api extends App_Controller
         $limit = $this->config->item('app_page_size');
         $offset = $limit * ($page-1);
 
-        $count = $this->interview_model->get_count(array('user_id' => $uid));
+        $count = $this->interview_model->interview_count(array('user_id' => $uid));
         if ($count) {
             $interviews = $this->interview_model->interview_list(array('user_id' => $uid), $limit, $offset);
         } else {
@@ -293,7 +293,7 @@ class Api extends App_Controller
             'user_id' => $uid,
             'job_id' => $job_id,
         ));
-        if (!empty($apply) && $apply['create_time'] > time() - 86400 * $this->config->item('apply_days')) {// 指定天数之内申请过
+        if (!empty($apply) && ($apply['create_time'] > time() - 86400 * $this->config->item('apply_days'))) {// 指定天数之内申请过
             return false;
         } else {
             return true;

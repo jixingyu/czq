@@ -64,7 +64,7 @@ CREATE TABLE `app_token` (
 
 /*Data for the table `app_token` */
 
-insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'dea0364eeff9924b33351ca32b21c08b',1436945403,1439623803);
+insert  into `app_token`(`user_id`,`token`,`create_time`,`expires`) values (4,'7f6bec84d4250ea81846a0b752f744dc',1436234669,1438913069),(1,'58d03c6549c1104efffcf566ae09fb98',1437384586,1440062986);
 
 /*Table structure for table `apply` */
 
@@ -118,8 +118,6 @@ CREATE TABLE `favorite` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Data for the table `favorite` */
-
-insert  into `favorite`(`user_id`,`job_id`,`create_time`) values (1,1,0);
 
 /*Table structure for table `interview` */
 
@@ -183,7 +181,7 @@ CREATE TABLE `member` (
 
 /*Data for the table `member` */
 
-insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`,`create_time`,`update_time`) values (1,'ymx_4@163.com','f59212fad079c49084ed93ddc8cab1bf','小明','13451234123',1,1436504441,1436504441),(7,'445346494@qq.com','5f2cd3608f804586f736df6519dcdcfa','arsene','13341234123',1,1436505835,1436506235);
+insert  into `member`(`user_id`,`email`,`password`,`real_name`,`mobile`,`is_active`,`create_time`,`update_time`) values (1,'ymx_4@163.com','cc1251c21d4bf83d944e3e1b1b58d3fa','小明','13451234123',1,1436504441,1436504441),(7,'445346494@qq.com','5f2cd3608f804586f736df6519dcdcfa','arsene','13341234123',1,1436505835,1436506235);
 
 /*Table structure for table `pass_token` */
 
@@ -200,7 +198,7 @@ CREATE TABLE `pass_token` (
 
 /*Data for the table `pass_token` */
 
-insert  into `pass_token`(`email`,`token`,`type`,`expires`) values ('ymx_4@163.com','7b0b149071a95ccb89b353f99f5b40e3',1,0);
+insert  into `pass_token`(`email`,`token`,`type`,`expires`) values ('ymx_4@163.com','e97f78ac333c181d65799296abec2e7a',1,0);
 
 /*Table structure for table `resume` */
 
@@ -226,12 +224,13 @@ CREATE TABLE `resume` (
   `experience_completed` tinyint(1) DEFAULT '0',
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
+  `is_deleted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resume` */
 
-insert  into `resume`(`id`,`user_id`,`resume_name`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`evaluation`,`personal_info_completed`,`evaluation_completed`,`experience_completed`,`create_time`,`update_time`) values (1,1,'未命名简历','',0,0,'','',0,'','','','',NULL,0,0,0,1436234729,1436234729);
+insert  into `resume`(`id`,`user_id`,`resume_name`,`real_name`,`gender`,`birthday`,`native_place`,`political_status`,`working_years`,`mobile`,`email`,`school`,`major`,`evaluation`,`personal_info_completed`,`evaluation_completed`,`experience_completed`,`create_time`,`update_time`,`is_deleted`) values (1,1,'未命名简历','',0,0,'','',0,'','','','',NULL,0,0,0,1436234729,1436234729,0);
 
 /*Table structure for table `work_experience` */
 
@@ -247,7 +246,7 @@ CREATE TABLE `work_experience` (
   `create_time` int(11) unsigned DEFAULT '0',
   `update_time` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `work_experience` */
 

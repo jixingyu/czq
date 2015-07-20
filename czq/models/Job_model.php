@@ -22,7 +22,7 @@ class Job_model extends MY_Model
 
     public function search_jobs($where, $limit, $offset = 0)
     {
-        $this->db->select("{$this->table}.id,{$this->table}.name as job,company.name as company,{$this->table}.degree,{$this->table}.salary,{$this->table}.update_time");
+        $this->db->select("{$this->table}.id as job_id,{$this->table}.name as job,company.name as company,{$this->table}.degree,{$this->table}.salary,{$this->table}.update_time as date");
         $this->db->from($this->table);
         $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
         if (!empty($where['q'])) {

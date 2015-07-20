@@ -19,6 +19,7 @@
                         <thead>
                             <tr>
                                 <th>更新时间</th>
+                                <th>状态</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -26,6 +27,7 @@
                             <?php foreach ($user_resume as $key => $row) :?>
                             <tr>
                                 <td><?php echo date('Y-m-d H:i:s', $row['update_time']);?></td>
+                                <td><?php echo $row['is_deleted'] ? '已删除' : '未删除';?></td>
                                 <td>
                                     <a href="/admin/resume/view/<?php echo $row['id'];?>">查看</a>
                                 </td>

@@ -8,7 +8,7 @@ ul {
 </style>
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">查看用户简历</h1>
+        <h1 class="page-header">查看用户简历<?php if ($resume['is_deleted']) echo '<span class="text-danger">(已删除)<span>';?></h1>
     </div>
     <!-- /.col-md-12 -->
 </div>
