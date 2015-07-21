@@ -44,7 +44,7 @@ class Resume_api extends App_Controller
             $this->response(api_error(400), 200);
         }
 
-        $resume = $this->resume_model->get_one(array('user_id' => $uid, 'resume_id' => $resume_id, 'is_deleted' => 0));
+        $resume = $this->resume_model->get_one(array('user_id' => $uid, 'id' => $resume_id, 'is_deleted' => 0));
         return $this->response(array(
             'code' => 1,
             'data' => $resume,
