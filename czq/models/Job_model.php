@@ -14,7 +14,7 @@ class Job_model extends MY_Model
             unset($where['q']);
         }
 
-        $where['is_deleted'] = 0;
+        $where[$this->table . '.is_deleted'] = 0;
         $this->db->where($where);
 
         return $this->db->count_all_results();
@@ -31,7 +31,7 @@ class Job_model extends MY_Model
             unset($where['q']);
         }
 
-        $where['is_deleted'] = 0;
+        $where[$this->table . '.is_deleted'] = 0;
         $this->db->where($where);
 
         if ($limit) {

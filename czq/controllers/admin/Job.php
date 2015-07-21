@@ -47,7 +47,10 @@ class Job extends Admin_Controller
         if (empty($data)) {
             show_404();
         }
-        $company = $this->company_model->find($data['company_id']);
+        $company = $this->company_model->get_one(array(
+            'id' => $data['company_id'],
+            'is_deleted' => 0,
+        ));
         $data['company'] = $company['name'];
         if (!empty($data['benefit'])) {
             $data['benefit'] = json_decode($data['benefit'], true);
@@ -81,13 +84,16 @@ class Job extends Admin_Controller
             'working_years_list' => $this->config->item('working_years', 'job'),
             'job_type_list' => $this->config->item('job_type', 'job'),
             'benefit_list' => $this->config->item('benefit', 'job'),
-            'company_list' => $this->company_model->get_list(),
+            'company_list' => $this->company_model->get_list(array('is_deleted' => 0)),
             'status' => 0,
         );
         array_shift($data['district_list']);
 
         if ($id) {
             $data['job'] = $this->job_model->get_one(array('id' => $id, 'is_deleted' => 0));
+            if (empty($data['job'])) {
+                show_404();
+            }
             if (!empty($data['job']['benefit'])) {
                 $data['job']['benefit'] = json_decode($data['job']['benefit'], true);
             }

@@ -105,6 +105,8 @@ class Api extends App_Controller
         $job = $this->job_model->job_detail($id);
         if (empty($job)) {
             $this->response(api_error(400), 200);
+        } elseif ($job['is_deleted']) {
+            $this->response(api_error(90001, '该职位已删除！'), 200);
         }
         $job['is_favorite'] = $job['applied'] = 0;
         if ($uid) {

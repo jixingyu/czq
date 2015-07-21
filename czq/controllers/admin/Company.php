@@ -22,10 +22,10 @@ class Company extends Admin_Controller
             'company_list' => array(),
         );
 
-        $count = $this->company_model->get_count();
+        $count = $this->company_model->get_count(array('is_deleted' => 0));
         if ($count) {
             $limit = $this->config->item('page_size');
-            $data['company_list'] = $this->company_model->get_list(array(), $limit, $offset);
+            $data['company_list'] = $this->company_model->get_list(array('is_deleted' => 0), $limit, $offset);
 
             $this->load->library('pagination');
 
@@ -55,7 +55,10 @@ class Company extends Admin_Controller
         );
 
         if ($id) {
-            $data['company'] = $this->company_model->get_one(array('id' => $id));
+            $data['company'] = $this->company_model->get_one(array('id' => $id, 'is_deleted' => 0));
+            if (empty($data['company'])) {
+                show_404();
+            }
         }
 
         $post = $this->input->post();
@@ -100,14 +103,14 @@ class Company extends Admin_Controller
     public function deleteCompany($id = 0)
     {
         $data = array('code' => 0);
-        $company = $this->company_model->get_one(array('id' => $id));
+        $company = $this->company_model->get_one(array('id' => $id, 'is_deleted' => 0));
         if (!empty($company)) {
         	$this->load->model('job_model');
             $exist = $this->job_model->get_count(array('company_id' => $id, 'is_deleted' => 0));
             if ($exist > 0) {
                 $data['message'] = '该公司下有发布的职位，无法删除';
             } else {
-                $this->company_model->delete($id);
+                $this->company_model->update(array('is_deleted' => 1), array('id' => $id));
                 $data['code'] = 1;
             }
         }
