@@ -14,7 +14,7 @@ class Api extends App_Controller
             'degree' => $this->config->item('degree', 'job'),
             'salary' => $this->config->item('salary', 'job'),
             'district' => $this->config->item('district', 'job'),
-            'working_years' => $this->config->item('working_years', 'job'),
+            'political_status' => $this->config->item('political_status', 'job'),
             'resume_limit'  => $this->config->item('resume_limit'),
         );
         return $this->response(array(

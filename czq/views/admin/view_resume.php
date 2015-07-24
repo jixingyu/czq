@@ -48,8 +48,8 @@ ul {
                                 <td><?php echo $resume['political_status']; ?></td>
                             </tr>
                             </tr>
-                                <td>工作年限</td>
-                                <td><?php echo $resume['working_years']; ?></td>
+                                <td>参加工作时间</td>
+                                <td><?php echo date('Y-m-d', $resume['work_start_time']); ?></td>
                             </tr>
                             </tr>
                                 <td>手机</td>
@@ -62,6 +62,10 @@ ul {
                             </tr>
                                 <td>毕业院校</td>
                                 <td><?php echo $resume['school']; ?></td>
+                            </tr>
+                            </tr>
+                                <td>学历</td>
+                                <td><?php echo $resume['degree']; ?></td>
                             </tr>
                             </tr>
                                 <td>专业</td>
@@ -97,7 +101,7 @@ ul {
                         <tbody>
                             <?php foreach ($experiences as $row) { ?>
                             <tr>
-                                <td><?php echo date('Y-m-d', $row['start_time']);?> ~ <?php echo $row['end_time'] ? date('Y-m-d', $row['end_time']) : '至今';?></td>
+                                <td><?php echo date('Y-m-d', $row['start_time']);?> ~ <?php echo ($row['end_time'] != -1) ? date('Y-m-d', $row['end_time']) : '至今';?></td>
                                 <td><?php echo $row['company']; ?></td>
                                 <td><?php echo $row['description']; ?></td>
                             </tr>

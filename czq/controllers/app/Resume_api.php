@@ -67,7 +67,7 @@ class Resume_api extends App_Controller
             'resume_name' => '未命名简历',
         ));
         $this->response(array('code' => 1, 'data' => array(
-            'resume_id' => $resume_id,
+            'id' => $resume_id,
             'resume_name' => '未命名简历',
         )), 200);
     }
@@ -94,7 +94,7 @@ class Resume_api extends App_Controller
             'update_time' => time(),
         ), array(
             'id' => $resume_id,
-            'user_id' => $user_id
+            'user_id' => $uid
         ));
         $this->response(array('code' => 1), 200);
     }
@@ -118,33 +118,25 @@ class Resume_api extends App_Controller
         }
 
         $set['gender'] = $this->post('gender');
-        $set['gender'] = $gender ? 1 : 0;
+        $set['gender'] = $set['gender'] ? 1 : 0;
 
-        $birthday = intval($this->post('birthday'));
-        if ($birthday) {
-            $set['birthday'] = $birthday;
-        } else {
+        $set['birthday'] = intval($this->post('birthday'));
+        if (!$set['birthday']) {
             $set['personal_info_completed'] = 0;
         }
 
-        $native_place = trim($this->post('native_place'));
-        if ($native_place) {
-            $set['native_place'] = $native_place;
-        } else {
+        $set['native_place'] = trim($this->post('native_place'));
+        if (!$set['native_place']) {
             $set['personal_info_completed'] = 0;
         }
 
-        $political_status = trim($this->post('political_status'));
-        if ($political_status) {
-            $set['political_status'] = $political_status;
-        } else {
+        $set['political_status'] = trim($this->post('political_status'));
+        if (!$set['political_status']) {
             $set['personal_info_completed'] = 0;
         }
 
-        $working_years = intval($this->post('working_years'));
-        if ($working_years) {
-            $set['working_years'] = $working_years;
-        } else {
+        $set['work_start_time'] = intval($this->post('work_start_time'));
+        if (!$set['work_start_time']) {
             $set['personal_info_completed'] = 0;
         }
 
@@ -163,27 +155,29 @@ class Resume_api extends App_Controller
                 $set['email'] = $email;
             }
         } else {
+            $set['email'] = '';
             $set['personal_info_completed'] = 0;
         }
 
-        $school = trim($this->post('school'));
-        if ($school) {
-            $set['school'] = $school;
-        } else {
+        $set['school'] = trim($this->post('school'));
+        if (!$set['school']) {
             $set['personal_info_completed'] = 0;
         }
 
-        $major = trim($this->post('major'));
-        if ($major) {
-            $set['major'] = $major;
-        } else {
+        $set['degree'] = trim($this->post('degree'));
+        if (!$set['degree']) {
+            $set['personal_info_completed'] = 0;
+        }
+
+        $set['major'] = trim($this->post('major'));
+        if (!$set['major']) {
             $set['personal_info_completed'] = 0;
         }
 
         $set['update_time'] = time();
         $this->resume_model->update($set, array(
             'id' => $resume_id,
-            'user_id' => $user_id
+            'user_id' => $uid
         ));
         $this->response(array('code' => 1), 200);
     }
@@ -265,6 +259,9 @@ class Resume_api extends App_Controller
         }
 
         $set['end_time'] = $this->post('end_time') ?: 0;
+        if ($set['end_time'] != -1 && $set['end_time'] < $set['start_time']) {
+            $this->response(api_error(90001, '结束时间不能在开始时间之前！'), 200);
+        }
 
         $set['description'] = $this->post('description');
         if (empty($set['description'])) {
