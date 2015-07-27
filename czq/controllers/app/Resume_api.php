@@ -275,6 +275,7 @@ class Resume_api extends App_Controller
                 array('id' => $experience_id, 'resume_id' => $resume_id)
             );
         } else {
+            $set['resume_id'] = $resume_id;
             $set['create_time'] = $set['update_time'];
             $this->work_experience_model->insert($set);
             if (!$resume['experience_completed']) {
