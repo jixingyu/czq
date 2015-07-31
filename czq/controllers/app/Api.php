@@ -94,6 +94,9 @@ class Api extends App_Controller
                 foreach ($jobs as $k => $value) {
                     $job_ids[] = $value['job_id'];
                     $jobs[$k]['is_favorite'] = 0;
+                    if ($jobs[$k]['salary'] != '面议') {
+                        $jobs[$k]['salary'] .= '/月';
+                    }
                 }
                 $this->load->model('favorite_model');
                 $favorites = $this->favorite_model->get_list_in($job_ids, 'job_id', array('user_id' => $uid), 'job_id');
@@ -108,6 +111,9 @@ class Api extends App_Controller
             } else {
                 foreach ($jobs as $k => $value) {
                     $jobs[$k]['is_favorite'] = 0;
+                    if ($jobs[$k]['salary'] != '面议') {
+                        $jobs[$k]['salary'] .= '/月';
+                    }
                 }
             }
         } else {
