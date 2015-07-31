@@ -1,5 +1,26 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
+////////////////////////////////////////////////////////////////////
+//                          _ooOoo_                               //
+//                         o8888888o                              //
+//                         88" . "88                              //
+//                         (| ^_^ |)                              //
+//                         O\  =  /O                              //
+//                      ____/`---'\____                           //
+//                    .'  \\|     |//  `.                         //
+//                   /  \\|||  :  |||//  \                        //
+//                  /  _||||| -:- |||||-  \                       //
+//                  |   | \\\  -  /// |   |                       //
+//                  | \_|  ''\---/''  |   |                       //
+//                  \  .-\__  `-`  ___/-. /                       //
+//                ___`. .'  /--.--\  `. . ___                     //
+//              ."" '<  `.___\_<|>_/___.'  >'"".                  //
+//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
+//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
+//      ========`-.____`-.___\_____/___.-`____.-'========         //
+//                           `=---='                              //
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
+//         佛祖保佑       永无BUG     永不修改                    //
+////////////////////////////////////////////////////////////////////
 class Api extends App_Controller
 {
     public function __construct()
@@ -9,13 +30,20 @@ class Api extends App_Controller
 
     public function appconfig_get()
     {
+        $version = $this->get('version') ?: '1.0.0';
+        switch ($version) {            
+            default:
+                $force_update = 0;
+                break;
+        }
         $this->config->load('job', TRUE);
         $response = array(
             'degree' => $this->config->item('degree', 'job'),
-            'salary' => $this->config->item('salary', 'job'),
+            // 'salary' => $this->config->item('salary', 'job'),
             'district' => $this->config->item('district', 'job'),
             'political_status' => $this->config->item('political_status', 'job'),
             'resume_limit'  => $this->config->item('resume_limit'),
+            'force_update' => $force_update,
         );
         return $this->response(array(
             'code' => 1,

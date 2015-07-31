@@ -8,9 +8,8 @@ class Job_model extends MY_Model
     {
         $this->db->from($this->table);
         if (!empty($where['q'])) {
-            $this->db->like('job.name', $where['q']);
             $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
-            $this->db->like('company.name', $where['q']);
+            $this->db->where("(job.name like '%{$where['q']}%' or company.name like '%{$where['q']}%')");
             unset($where['q']);
         }
 
@@ -26,8 +25,7 @@ class Job_model extends MY_Model
         $this->db->from($this->table);
         $this->db->join('company', "company.id = {$this->table}.company_id", 'left');
         if (!empty($where['q'])) {
-            $this->db->like('job.name', $where['q']);
-            $this->db->like('company.name', $where['q']);
+            $this->db->where("(job.name like '%{$where['q']}%' or company.name like '%{$where['q']}%')");
             unset($where['q']);
         }
 

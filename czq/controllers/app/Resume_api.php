@@ -305,6 +305,15 @@ class Resume_api extends App_Controller
             $this->response(api_error(90001, '该简历不存在！'), 200);
         }
         $this->work_experience_model->delete(array('id' => $experience_id));
+        if ($resume['experience_completed']) {
+            $ex_count = $this->work_experience_model->get_count(array('resume_id' => $experience['resume_id']));
+            if ($ex_count == 0) {
+                $this->resume_model->update(array(
+                    'experience_completed' => 0,
+                    'update_time' => time()
+                ), array('id' => $experience['resume_id']));
+            }
+        }
         $this->response(array('code' => 1), 200);
     }
 
