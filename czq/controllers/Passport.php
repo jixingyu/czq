@@ -89,8 +89,8 @@ class Passport extends Front_Controller
         $this->load->library('email');
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'smtp.qq.com';
-        $config['smtp_user'] = '445346494@qq.com';
-        $config['smtp_pass'] = 'test1111';
+        $config['smtp_user'] = 'wszpapp@qq.com';
+        $config['smtp_pass'] = 'wszpapp168';
         $config['smtp_port'] = '25';
         $config['charset'] = 'utf-8';
         $config['newline'] = "\r\n";
@@ -98,7 +98,7 @@ class Passport extends Front_Controller
         $config['mailtype'] = 'html';
         $this->email->initialize($config);
 
-        $this->email->from('445346494@qq.com', '握手招聘');
+        $this->email->from('wszpapp@qq.com', '握手招聘');
         $this->email->to($email);
 
         $this->email->subject('握手招聘 - 找回密码');
